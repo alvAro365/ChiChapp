@@ -1,0 +1,6 @@
+framework module Pods_ChiChapp {
+  umbrella header "Pods-ChiChapp-umbrella.h"
+
+  export *
+  module * { export * }
+}

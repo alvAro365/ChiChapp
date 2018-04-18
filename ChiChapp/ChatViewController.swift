@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageKit
+import Firebase
 
 class ChatViewController: MessagesViewController {
     
@@ -22,7 +23,23 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
         
-
+        let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
+        _ = query.observe(.childAdded, with: { [weak self] snapshot in
+            if let data = snapshot.value as? [String: String],
+                let id = data["sender_id"],
+                let name = data["name"],
+                let text = data["text"],
+                !text.isEmpty {
+                
+                let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
+//                let otherSender = Sender(id: "Noah", displayName: "NA")
+                let message = ChatMessage(attributedText: attributedText, sender: (self!.currentSender()), messageId: id, date: Date())
+                self!.messages.append(message)
+                self?.messagesCollectionView.insertSections([(self?.messages.count)! - 1])
+            }
+        })
+        
+        print("Amount of messages \(messages.count)")
         // Do any additional setup after loading the view.
     }
 
@@ -87,13 +104,18 @@ extension ChatViewController: MessageInputBarDelegate {
                 messages.append(imageMessage)
                 messagesCollectionView.insertSections([messages.count - 1])
             } else if let text = component as? String {
+                // Firebase
+                let ref = Constants.refs.databaseChats.childByAutoId()
+                let messageFirebase = ["sender_id": currentSender().id, "name": currentSender().displayName, "text": text]
+                ref.setValue(messageFirebase)
                 
-                let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.blue ])
+                // Default
+//                let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
 //                let otherSender = Sender(id: "Noah", displayName: "NA")
-                let message = ChatMessage(attributedText: attributedText, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-                messages.append(message)
-                print("Amount of messages \(messages.count)")
-                messagesCollectionView.insertSections([messages.count - 1])
+//                let message = ChatMessage(attributedText: attributedText, sender: otherSender, messageId: UUID().uuidString, date: Date())
+//                messages.append(message)
+//                print("Amount of messages \(messages.count)")
+//                messagesCollectionView.insertSections([messages.count - 1])
             }
         }
         inputBar.inputTextView.text = String()
