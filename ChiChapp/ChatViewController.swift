@@ -64,13 +64,16 @@ extension ChatViewController: MessagesDataSource {
 }
 
 extension ChatViewController: MessagesLayoutDelegate {
-    
     func heightForLocation(message: MessageType, at indexPath: IndexPath, with maxWidth: CGFloat, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 200
     }
 }
 
 extension ChatViewController: MessagesDisplayDelegate {
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        avatarView.set(avatar: Avatar(image: #imageLiteral(resourceName: "AlvarPng"), initials: "AA"))
+    }
     
 }
 
@@ -86,7 +89,7 @@ extension ChatViewController: MessageInputBarDelegate {
             } else if let text = component as? String {
                 
                 let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.blue ])
-                
+//                let otherSender = Sender(id: "Noah", displayName: "NA")
                 let message = ChatMessage(attributedText: attributedText, sender: currentSender(), messageId: UUID().uuidString, date: Date())
                 messages.append(message)
                 print("Amount of messages \(messages.count)")
