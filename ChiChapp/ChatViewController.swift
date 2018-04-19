@@ -14,15 +14,43 @@ class ChatViewController: MessagesViewController {
     
     
     var messages: [MessageType] = []
+    var userID: String!
+    var userName: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        setUserDefaults()
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
+        observeFirebase()
+
+        print("Amount of messages \(messages.count)")
+        // Do any additional setup after loading the view.
+    }
+    
+    func setUserDefaults() {
+        print("Set user defaults")
+        let defaults = UserDefaults.standard
         
+        if let id = defaults.string(forKey: "user_id"),
+            let name = defaults.string(forKey: "user_name") {
+            userID = id
+            userName = name
+        } else {
+            userID = String(arc4random_uniform(999999))
+            userName = "Unknown"
+            
+            defaults.set(userID, forKey: "user_id")
+        }
+        
+        title = "Chat: \(currentSender().displayName)"
+        
+    }
+    
+    func observeFirebase() {
         let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
         _ = query.observe(.childAdded, with: { [weak self] snapshot in
             if let data = snapshot.value as? [String: String],
@@ -32,15 +60,13 @@ class ChatViewController: MessagesViewController {
                 !text.isEmpty {
                 
                 let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
-//                let otherSender = Sender(id: "Noah", displayName: "NA")
-                let message = ChatMessage(attributedText: attributedText, sender: (self!.currentSender()), messageId: id, date: Date())
+                //                let otherSender = Sender(id: "Noah", displayName: "NA")
+                let message = ChatMessage(attributedText: attributedText, sender: self!.currentSender() , messageId: id, date: Date())
                 self!.messages.append(message)
-                self?.messagesCollectionView.insertSections([(self?.messages.count)! - 1])
+                self!.messagesCollectionView.insertSections([(self!.messages.count) - 1])
+                self!.messagesCollectionView.scrollToBottom()
             }
         })
-        
-        print("Amount of messages \(messages.count)")
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,7 +92,7 @@ class ChatViewController: MessagesViewController {
 extension ChatViewController: MessagesDataSource {
     
     func currentSender() -> Sender {
-        return Sender(id: "1234", displayName: "Alvar")
+        return Sender(id: self.userID, displayName: self.userName)
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
@@ -89,9 +115,8 @@ extension ChatViewController: MessagesLayoutDelegate {
 extension ChatViewController: MessagesDisplayDelegate {
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        avatarView.set(avatar: Avatar(image: #imageLiteral(resourceName: "AlvarPng"), initials: "AA"))
+        avatarView.set(avatar: Avatar(image: #imageLiteral(resourceName: "AlvarPng") , initials: "AA"))
     }
-    
 }
 
 extension ChatViewController: MessageInputBarDelegate {
@@ -108,17 +133,8 @@ extension ChatViewController: MessageInputBarDelegate {
                 let ref = Constants.refs.databaseChats.childByAutoId()
                 let messageFirebase = ["sender_id": currentSender().id, "name": currentSender().displayName, "text": text]
                 ref.setValue(messageFirebase)
-                
-                // Default
-//                let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
-//                let otherSender = Sender(id: "Noah", displayName: "NA")
-//                let message = ChatMessage(attributedText: attributedText, sender: otherSender, messageId: UUID().uuidString, date: Date())
-//                messages.append(message)
-//                print("Amount of messages \(messages.count)")
-//                messagesCollectionView.insertSections([messages.count - 1])
             }
         }
         inputBar.inputTextView.text = String()
-        messagesCollectionView.scrollToBottom()
     }
 }
