@@ -43,6 +43,10 @@ class CreateUserViewController: UIViewController {
                 self?.userName = textField.text
                 
                 defaults.set(textField.text, forKey: Constants.userDefaults.userName)
+                
+                if defaults.string(forKey: Constants.userDefaults.userID) == nil {
+                    defaults.set(UUID().uuidString, forKey: Constants.userDefaults.userID)
+                }
                 self?.performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
             }
         }))
@@ -53,10 +57,7 @@ class CreateUserViewController: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.segues.toChatVC {
-            let chatViewController = segue.destination as? ChatViewController
-            
+
         }
-
-
     }
 }

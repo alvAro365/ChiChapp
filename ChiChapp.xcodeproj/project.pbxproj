@@ -12,7 +12,6 @@
 		24618E2820852387007A9D86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24618E2720852387007A9D86 /* AppDelegate.swift */; };
 		24618E2D20852387007A9D86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24618E2B20852387007A9D86 /* Main.storyboard */; };
 		24618E2F20852387007A9D86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24618E2E20852387007A9D86 /* Assets.xcassets */; };
-		24618E3220852387007A9D86 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24618E3020852387007A9D86 /* LaunchScreen.storyboard */; };
 		246781DC2088992600F2B615 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246781DB2088992600F2B615 /* CreateUserViewController.swift */; };
 		2478D42020852CC100350F7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2478D41F20852CC100350F7F /* GoogleService-Info.plist */; };
 		24DEBD5320876EFB00D8A379 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DEBD5220876EFB00D8A379 /* ChatMessage.swift */; };
@@ -162,7 +161,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24618E3220852387007A9D86 /* LaunchScreen.storyboard in Resources */,
 				2478D42020852CC100350F7F /* GoogleService-Info.plist in Resources */,
 				24618E2F20852387007A9D86 /* Assets.xcassets in Resources */,
 				24618E2D20852387007A9D86 /* Main.storyboard in Resources */,

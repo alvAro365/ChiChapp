@@ -16,6 +16,7 @@ class ChatViewController: MessagesViewController {
     var messages: [MessageType] = []
     var userID: String!
     var userName: String!
+    var currentUser: Sender!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,26 +27,22 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
         observeFirebase()
-
-        title = "Chat: \(currentSender().displayName)"
-        print("Amount of messages \(messages.count)")
-        // Do any additional setup after loading the view.
     }
     
     func setUserDefaults() {
-//        print("Set user defaults")
-//        let defaults = UserDefaults.standard
-//
-//        if let id = defaults.string(forKey: Constants.userDefaults.userID),
-//            let name = defaults.string(forKey: Constants.userDefaults.userName) {
-//            userID = id
-//            userName = name
-//        } else {
-//            userID = String(arc4random_uniform(999999))
-//            userName = ""
-//
-//            defaults.set(userID, forKey: Constants.userDefaults.userID)
-//        }
+        let defaults = UserDefaults.standard
+
+        if let id = defaults.string(forKey: Constants.userDefaults.userID),
+            let name = defaults.string(forKey: Constants.userDefaults.userName) {
+            currentUser = Sender(id: id, displayName: name)
+        } else {
+            userID = String(arc4random_uniform(999999))
+            userName = ""
+            currentUser = Sender(id: userID, displayName: userName)
+
+            defaults.set(userID, forKey: Constants.userDefaults.userID)
+        }
+        title = "Chat: \(currentSender().displayName)"
 
     }
     
@@ -62,11 +59,10 @@ class ChatViewController: MessagesViewController {
                 let sender = Sender(id: id, displayName: name)
                 
                 let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
-                //                let otherSender = Sender(id: "Noah", displayName: "NA")
                 let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: messageId, date: Date())
-                self!.messages.append(message)
-                self!.messagesCollectionView.insertSections([(self!.messages.count) - 1])
-                self!.messagesCollectionView.scrollToBottom()
+                self?.messages.append(message)
+                self?.messagesCollectionView.insertSections([(self?.messages.count)! - 1])
+                self?.messagesCollectionView.scrollToBottom()
             }
         })
     }
@@ -76,10 +72,6 @@ class ChatViewController: MessagesViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: MessageDataSource delegate methods
-    
-
-
     /*
     // MARK: - Navigation
 
@@ -94,30 +86,16 @@ class ChatViewController: MessagesViewController {
 extension ChatViewController: MessagesDataSource {
     
     func currentSender() -> Sender {
-        let defaults = UserDefaults.standard
-        var sender: Sender
-        if let id = defaults.string(forKey: Constants.userDefaults.userID),
-            let userName = defaults.string(forKey: Constants.userDefaults.userName) {
-            sender = Sender(id: id, displayName: userName)
-        } else {
-            let idNr = String(arc4random_uniform(999999))
-            let userName = ""
-            sender = Sender(id: idNr, displayName: userName)
-            defaults.set(userID, forKey: Constants.userDefaults.userID)
-        }
-//        return Sender(id: self.userID, displayName: self.userName)
-        return sender
+        return self.currentUser
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
-        
     }
     
     func numberOfMessages(in messagesCollectionView: MessagesCollectionView) -> Int {
         return messages.count
     }
-    
 }
 
 extension ChatViewController: MessagesLayoutDelegate {
@@ -128,9 +106,9 @@ extension ChatViewController: MessagesLayoutDelegate {
 
 extension ChatViewController: MessagesDisplayDelegate {
     
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+//    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
 //        avatarView.set(avatar: Avatar(image: #imageLiteral(resourceName: "AlvarPng") , initials: "AA"))
-    }
+//    }
 }
 
 extension ChatViewController: MessageInputBarDelegate {
