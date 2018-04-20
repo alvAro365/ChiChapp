@@ -11,8 +11,6 @@ import MessageKit
 import Firebase
 
 class ChatViewController: MessagesViewController {
-    
-    
     var messages: [MessageType] = []
     var userID: String!
     var userName: String!
@@ -72,7 +70,6 @@ class ChatViewController: MessagesViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -80,7 +77,11 @@ class ChatViewController: MessagesViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
+    
+    // MARK: - Actions
+    
+
+    
 }
 
 extension ChatViewController: MessagesDataSource {
