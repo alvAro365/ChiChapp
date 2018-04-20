@@ -18,9 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-WT-DjQ">
-                                <rect key="frame" x="143" y="318" width="88" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-WT-DjQ">
+                                <rect key="frame" x="164" y="318.5" width="47" height="30"/>
                                 <state key="normal" title="Sign In"/>
                                 <connections>
                                     <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="NUU-CM-S8z"/>
@@ -28,6 +27,10 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ecc-WT-DjQ" firstAttribute="centerY" secondItem="xZx-SY-BeD" secondAttribute="centerY" id="ALq-Os-4vm"/>
+                            <constraint firstItem="Ecc-WT-DjQ" firstAttribute="centerX" secondItem="xZx-SY-BeD" secondAttribute="centerX" id="YQB-UZ-ESF"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="GRt-Vi-TCS"/>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome!" id="k24-lV-pgq">
