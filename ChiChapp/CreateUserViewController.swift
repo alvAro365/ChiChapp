@@ -24,31 +24,35 @@ class CreateUserViewController: UIViewController {
     }
     
     @IBAction func showAlert(_ sender: UIButton) {
-        showDisplayNameDialog()
+        if UserDefaults.standard.string(forKey: Constants.userDefaults.userID) != nil {
+            performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
+        } else {
+            showDisplayNameDialog()
+        }
     }
     
     func showDisplayNameDialog() {
         let defaults = UserDefaults.standard
         
         let alert = UIAlertController(title: "Create user", message: "Please choose your user name.", preferredStyle: .alert)
-        alert.addTextField { textField in
-            if let name = defaults.string(forKey: Constants.userDefaults.userName) {
-                textField.text = name
-            } else {
-                textField.text = ""
-            }
-        }
+        alert.addTextField { textField in textField.placeholder = "Enter name here" }
+        
         alert.addAction(UIAlertAction(title: "DONE", style: .default, handler: { [weak self, weak alert] _ in
-            if let textField = alert?.textFields![0], !textField.text!.isEmpty {
-                self?.userName = textField.text
+            if defaults.string(forKey: Constants.userDefaults.userID) != nil {
+                self?.performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
+            } else {
+                let textField = alert?.textFields![0]
+                let ref = Constants.refs.databaseUsers.childByAutoId()
+                print("The ref is: \(ref.key)")
                 
-                defaults.set(textField.text, forKey: Constants.userDefaults.userName)
+                defaults.set(textField?.text, forKey: Constants.userDefaults.userName)
+                defaults.set(ref.key, forKey: Constants.userDefaults.userID)
                 
-                if defaults.string(forKey: Constants.userDefaults.userID) == nil {
-                    defaults.set(UUID().uuidString, forKey: Constants.userDefaults.userID)
-                }
+                let userFirebase = ["name": textField!.text!, "id": ref.key] as [String : Any]
+                ref.setValue(userFirebase)
                 self?.performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
             }
+//                self?.present(alert!, animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
     }

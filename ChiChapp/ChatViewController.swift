@@ -19,7 +19,7 @@ class ChatViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setUserDefaults()
+        loadUserDefaults()
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -27,21 +27,14 @@ class ChatViewController: MessagesViewController {
         observeFirebase()
     }
     
-    func setUserDefaults() {
+    func loadUserDefaults() {
         let defaults = UserDefaults.standard
 
         if let id = defaults.string(forKey: Constants.userDefaults.userID),
             let name = defaults.string(forKey: Constants.userDefaults.userName) {
             currentUser = Sender(id: id, displayName: name)
-        } else {
-            userID = String(arc4random_uniform(999999))
-            userName = ""
-            currentUser = Sender(id: userID, displayName: userName)
-
-            defaults.set(userID, forKey: Constants.userDefaults.userID)
+            title = "Chat: \(currentSender().displayName)"
         }
-        title = "Chat: \(currentSender().displayName)"
-
     }
     
     func observeFirebase() {
