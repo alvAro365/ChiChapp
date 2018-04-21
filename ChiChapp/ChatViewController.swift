@@ -15,16 +15,27 @@ class ChatViewController: MessagesViewController {
     var userID: String!
     var userName: String!
     var currentUser: Sender!
+    var data: Firebase!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        loadUserDefaults()
+        data = Firebase()
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
-        observeFirebase()
+        loadUserDefaults()
+        loadMessagesFromFirebase()
+        
+    }
+    
+    func loadMessagesFromFirebase() {
+        data.observeFirebase { messages in
+            self.messages = messages
+            print("Messages: \(self.messages)")
+            self.messagesCollectionView.insertSections([messages.count - 1])
+            self.messagesCollectionView.scrollToBottom()
+        }
     }
     
     func loadUserDefaults() {
@@ -36,27 +47,6 @@ class ChatViewController: MessagesViewController {
             title = "Chat: \(currentSender().displayName)"
         }
     }
-    
-    func observeFirebase() {
-        let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
-        _ = query.observe(.childAdded, with: { [weak self] snapshot in
-            if let data = snapshot.value as? [String: String],
-                let id = data["sender_id"],
-                let name = data["name"],
-                let text = data["text"],
-                let messageId = data["message_id"],
-                !text.isEmpty {
-                
-                let sender = Sender(id: id, displayName: name)
-                
-                let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
-                let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: messageId, date: Date())
-                self?.messages.append(message)
-                self?.messagesCollectionView.insertSections([(self?.messages.count)! - 1])
-                self?.messagesCollectionView.scrollToBottom()
-            }
-        })
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -64,17 +54,11 @@ class ChatViewController: MessagesViewController {
     }
     
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    
-    // MARK: - Actions
-    
-
-    
 }
 
 extension ChatViewController: MessagesDataSource {
@@ -109,7 +93,6 @@ extension ChatViewController: MessageInputBarDelegate {
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         print("Send button clicked")
         for component in inputBar.inputTextView.components {
-            
             if let image = component as? UIImage {
                 let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
                 messages.append(imageMessage)
@@ -117,7 +100,7 @@ extension ChatViewController: MessageInputBarDelegate {
             } else if let text = component as? String {
                 // Firebase
                 let ref = Constants.refs.databaseChats.childByAutoId()
-                let messageFirebase = ["sender_id": currentSender().id, "name": currentSender().displayName, "text": text, "message_id": UUID().uuidString]
+                let messageFirebase = ["sender_id": currentSender().id, "name": currentSender().displayName, "text": text, "message_id": ref.key]
                 ref.setValue(messageFirebase)
             }
         }
