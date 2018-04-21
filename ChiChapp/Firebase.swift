@@ -17,13 +17,13 @@ class Firebase {
         let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
         _ = query.observe(.childAdded, with: { snapshot in
             if let data = snapshot.value as? [String: String],
-                let id = data["sender_id"],
-                let name = data["name"],
+                let senderID  = data["sender_id"],
+                let senderName = data["name"],
                 let text = data["text"],
                 let messageId = data["message_id"],
                 !text.isEmpty {
                 
-                let sender = Sender(id: id, displayName: name)
+                let sender = Sender(id: senderID , displayName: senderName)
                 
                 let attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
                 let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: messageId, date: Date())
