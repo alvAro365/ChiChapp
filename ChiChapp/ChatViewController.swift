@@ -115,7 +115,10 @@ extension ChatViewController: MessageInputBarDelegate {
                 // Firebase
                 let messageRef = Constants.refs.databaseMessages
                 let messageChatRef = messageRef.child(chatsRef.key)
-                let messageFirebase = ["name": currentSender().id, "message": text, "timestamp": ServerValue.timestamp().description]
+                let messageFirebase = [Constants.messages.senderName: currentSender().displayName,
+                                       Constants.messages.message: text,
+                                       Constants.messages.timestamp: ServerValue.timestamp().description,
+                                       Constants.messages.senderId: currentSender().id]
                 messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
                 
             }

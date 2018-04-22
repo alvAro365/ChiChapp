@@ -28,4 +28,11 @@ struct Constants {
         static let toChatVC = "goToChat"
         static let chooseContactVC = "chooseContact"
     }
+    
+    struct messages {
+        static let senderId = "sender_id"
+        static let senderName = "sender_name"
+        static let message = "message"
+        static let timestamp = "timestamp"
+    }
 }
