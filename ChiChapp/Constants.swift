@@ -21,6 +21,7 @@ struct Constants {
     struct userDefaults {
         static let userName = "user_name"
         static let userID = "user_id"
+        static let chatKey = "chat_key"
     }
     
     struct segues {

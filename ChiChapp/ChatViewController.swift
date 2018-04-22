@@ -17,7 +17,7 @@ class ChatViewController: MessagesViewController {
     var currentUser: Sender!
     var data: Firebase!
     var chatsRef: DatabaseReference!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         data = Firebase()
@@ -25,8 +25,6 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
-        // TODO: Load chatRef from userDefaults if it exists, otherwise create a new chatRef
-        chatsRef = Constants.refs.databaseChats.childByAutoId()
         loadUserDefaults()
         createChat()
         loadMessagesFromFirebase()
@@ -56,7 +54,9 @@ class ChatViewController: MessagesViewController {
     
     func loadUserDefaults() {
         let defaults = UserDefaults.standard
-
+        let chatKey = defaults.string(forKey: Constants.userDefaults.chatKey)
+        chatsRef = Constants.refs.databaseChats.child(chatKey!)
+        
         if let id = defaults.string(forKey: Constants.userDefaults.userID),
             let name = defaults.string(forKey: Constants.userDefaults.userName) {
             currentUser = Sender(id: id, displayName: name)

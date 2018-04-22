@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class ChooseContactViewController: UIViewController {
 
@@ -18,6 +19,12 @@ class ChooseContactViewController: UIViewController {
     
     // MARK: Actions
     @IBAction func chatWith(_ sender: UIButton) {
+        let defaults = UserDefaults.standard
+
+        if defaults.string(forKey: Constants.userDefaults.chatKey) == nil {
+            let chatKey = Constants.refs.databaseChats.childByAutoId().key
+            defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
+        }
         performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
     }
     
