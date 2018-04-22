@@ -25,7 +25,7 @@ class CreateUserViewController: UIViewController {
     
     @IBAction func showAlert(_ sender: UIButton) {
         if UserDefaults.standard.string(forKey: Constants.userDefaults.userID) != nil {
-            performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
+            performSegue(withIdentifier: Constants.segues.chooseContactVC, sender: self)
         } else {
             showDisplayNameDialog()
         }
@@ -39,7 +39,7 @@ class CreateUserViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "DONE", style: .default, handler: { [weak self, weak alert] _ in
             if defaults.string(forKey: Constants.userDefaults.userID) != nil {
-                self?.performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
+                self?.performSegue(withIdentifier: Constants.segues.chooseContactVC, sender: self)
             } else {
                 let textField = alert?.textFields![0]
                 let ref = Constants.refs.databaseUsers.childByAutoId()
@@ -50,20 +50,21 @@ class CreateUserViewController: UIViewController {
                 
                 let userFirebase = ["name": textField!.text!, "id": ref.key] as [String : Any]
                 ref.setValue(userFirebase)
-                self?.performSegue(withIdentifier: Constants.segues.toChatVC, sender: self)
+                self?.performSegue(withIdentifier: Constants.segues.chooseContactVC, sender: self)
             }
 //                self?.present(alert!, animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
     }
     // MARK: - Navigation
-
+/*
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Constants.segues.toChatVC {
 
-        }
     }
+ 
+ */
+    
     // MARK: - Actions
     @IBAction func unwindToSignIn(sender: UIStoryboardSegue) {
         

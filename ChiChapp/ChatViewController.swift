@@ -16,6 +16,7 @@ class ChatViewController: MessagesViewController {
     var userName: String!
     var currentUser: Sender!
     var data: Firebase!
+    var chatsRef: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,16 +25,31 @@ class ChatViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
+        // TODO: Load chatRef from userDefaults if it exists, otherwise create a new chatRef
+        chatsRef = Constants.refs.databaseChats.childByAutoId()
         loadUserDefaults()
+        createChat()
         loadMessagesFromFirebase()
         
+    }
+    
+    // MARK: Private methods
+    
+    func createChat() {
+        let membersRef = Constants.refs.databaseChatMembers.child(chatsRef.key)
+        let members = [currentUser.id: currentUser.displayName, "secondUser": "Anonymys"]
+        let chatsMetaInfo = ["title": currentUser.displayName + " and Anonymys" ]
+        membersRef.setValue(members)
+        chatsRef.setValue(chatsMetaInfo)
     }
     
     func loadMessagesFromFirebase() {
         data.observeFirebase { messages in
             self.messages = messages
             print("Messages: \(self.messages)")
-            self.messagesCollectionView.insertSections([messages.count - 1])
+            if self.messages.count > 0 {
+                self.messagesCollectionView.insertSections([messages.count - 1])
+            }
             self.messagesCollectionView.scrollToBottom()
         }
     }
@@ -50,7 +66,6 @@ class ChatViewController: MessagesViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Navigation
@@ -91,7 +106,6 @@ extension ChatViewController: MessagesDisplayDelegate {
 
 extension ChatViewController: MessageInputBarDelegate {
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
-        print("Send button clicked")
         for component in inputBar.inputTextView.components {
             if let image = component as? UIImage {
                 let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
@@ -99,9 +113,11 @@ extension ChatViewController: MessageInputBarDelegate {
                 messagesCollectionView.insertSections([messages.count - 1])
             } else if let text = component as? String {
                 // Firebase
-                let ref = Constants.refs.databaseChats.childByAutoId()
-                let messageFirebase = ["sender_id": currentSender().id, "name": currentSender().displayName, "text": text, "message_id": ref.key]
-                ref.setValue(messageFirebase)
+                let messageRef = Constants.refs.databaseMessages
+                let messageChatRef = messageRef.child(chatsRef.key)
+                let messageFirebase = ["name": currentSender().id, "message": text, "timestamp": ServerValue.timestamp().description]
+                messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
+                
             }
         }
         inputBar.inputTextView.text = String()

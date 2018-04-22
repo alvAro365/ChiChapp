@@ -14,6 +14,8 @@ struct Constants {
         static let databaseRoot = Database.database().reference()
         static let databaseChats = databaseRoot.child("chats")
         static let databaseUsers = databaseRoot.child("users")
+        static let databaseChatMembers = databaseRoot.child("members")
+        static let databaseMessages = databaseRoot.child("messages")
     }
     
     struct userDefaults {
@@ -23,5 +25,6 @@ struct Constants {
     
     struct segues {
         static let toChatVC = "goToChat"
+        static let chooseContactVC = "chooseContact"
     }
 }
