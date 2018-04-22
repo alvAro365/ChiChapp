@@ -11,9 +11,6 @@ import MessageKit
 import Firebase
 
 class FirebaseData {
-    func setupDatabase() {
-        
-    }
 
     func observeFirebase(completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
