@@ -15,12 +15,12 @@ class ChatViewController: MessagesViewController {
     var userID: String!
     var userName: String!
     var currentUser: Sender!
-    var data: Firebase!
+    var data: FirebaseData!
     var chatsRef: DatabaseReference!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        data = Firebase()
+        data = FirebaseData()
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self

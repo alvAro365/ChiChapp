@@ -10,7 +10,7 @@ import Foundation
 import MessageKit
 import Firebase
 
-class Firebase {
+class FirebaseData {
     func setupDatabase() {
         
     }

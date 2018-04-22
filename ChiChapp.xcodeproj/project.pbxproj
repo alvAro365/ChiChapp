@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24035011208B2AFD000A5F5A /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24035010208B2AFD000A5F5A /* Firebase.swift */; };
+		24035011208B2AFD000A5F5A /* FirebaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24035010208B2AFD000A5F5A /* FirebaseData.swift */; };
 		24035013208B4F12000A5F5A /* ChooseContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24035012208B4F12000A5F5A /* ChooseContactViewController.swift */; };
 		2409BEB92087A1760088829D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409BEB82087A1760088829D /* Constants.swift */; };
 		24149DD42087456F00DC2854 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24149DD32087456F00DC2854 /* ChatViewController.swift */; };
@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		24035010208B2AFD000A5F5A /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
+		24035010208B2AFD000A5F5A /* FirebaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseData.swift; sourceTree = "<group>"; };
 		24035012208B4F12000A5F5A /* ChooseContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseContactViewController.swift; sourceTree = "<group>"; };
 		2409BEB82087A1760088829D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		24149DD32087456F00DC2854 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 				24DEBD5220876EFB00D8A379 /* ChatMessage.swift */,
 				2409BEB82087A1760088829D /* Constants.swift */,
 				246781DB2088992600F2B615 /* CreateUserViewController.swift */,
-				24035010208B2AFD000A5F5A /* Firebase.swift */,
+				24035010208B2AFD000A5F5A /* FirebaseData.swift */,
 				24035012208B4F12000A5F5A /* ChooseContactViewController.swift */,
 			);
 			path = ChiChapp;
@@ -248,7 +248,7 @@
 				24618E2820852387007A9D86 /* AppDelegate.swift in Sources */,
 				24035013208B4F12000A5F5A /* ChooseContactViewController.swift in Sources */,
 				2409BEB92087A1760088829D /* Constants.swift in Sources */,
-				24035011208B2AFD000A5F5A /* Firebase.swift in Sources */,
+				24035011208B2AFD000A5F5A /* FirebaseData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
