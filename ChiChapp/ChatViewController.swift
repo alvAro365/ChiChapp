@@ -15,6 +15,7 @@ class ChatViewController: MessagesViewController {
     var userID: String!
     var userName: String!
     var currentUser: Sender!
+    var contact: Sender!
     var data: FirebaseData!
     var chatsRef: DatabaseReference!
 
@@ -35,8 +36,8 @@ class ChatViewController: MessagesViewController {
     
     func createChat() {
         let membersRef = Constants.refs.databaseChatMembers.child(chatsRef.key)
-        let members = [currentUser.id: currentUser.displayName, "secondUser": "Anonymys"]
-        let chatsMetaInfo = ["title": currentUser.displayName + " and Anonymys" ]
+        let members = [currentUser.id: currentUser.displayName, contact.id: contact.displayName]
+        let chatsMetaInfo = ["title": currentUser.displayName + " \(contact.displayName)" ]
         membersRef.setValue(members)
         chatsRef.setValue(chatsMetaInfo)
     }
@@ -54,13 +55,13 @@ class ChatViewController: MessagesViewController {
     
     func loadUserDefaults() {
         let defaults = UserDefaults.standard
-        let chatKey = defaults.string(forKey: Constants.userDefaults.chatKey)
+        let chatKey = defaults.string(forKey: Constants.userDefaults.chatOneKey)
         chatsRef = Constants.refs.databaseChats.child(chatKey!)
         
         if let id = defaults.string(forKey: Constants.userDefaults.userID),
             let name = defaults.string(forKey: Constants.userDefaults.userName) {
             currentUser = Sender(id: id, displayName: name)
-            title = "Chat: \(currentSender().displayName)"
+            title = "Chat: \(contact.displayName)"
         }
     }
 

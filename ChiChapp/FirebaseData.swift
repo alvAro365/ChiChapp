@@ -14,7 +14,7 @@ class FirebaseData {
 
     func observeMessages(completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
-        let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: Constants.userDefaults.chatKey)!).queryLimited(toLast: 5)
+        let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: Constants.userDefaults.chatOneKey)!).queryLimited(toLast: 5)
         _ = query.observe(.childAdded, with: { snapshot in
             if let data = snapshot.value as? [String: String],
                 let senderId = data[Constants.messages.senderId],
@@ -43,8 +43,10 @@ class FirebaseData {
             }
             completion(contacts)
         })
-        
-        
     }
-    
+ /*
+    func addContactWithChatId() -> <#return type#> {
+        <#function body#>
+    }
+    */
 }
