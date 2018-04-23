@@ -42,7 +42,7 @@ class ChatViewController: MessagesViewController {
     }
     
     func loadMessagesFromFirebase() {
-        data.observeFirebase { messages in
+        data.observeMessages { messages in
             self.messages = messages
             print("Messages: \(self.messages)")
             if self.messages.count > 0 {

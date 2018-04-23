@@ -35,4 +35,10 @@ struct Constants {
         static let message = "message"
         static let timestamp = "timestamp"
     }
+    
+    struct user {
+        static let id = "id"
+        static let displayName = "name"
+    
+    }
 }

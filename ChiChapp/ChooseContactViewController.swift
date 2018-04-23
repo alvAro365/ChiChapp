@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import MessageKit
 import Firebase
 
 class ChooseContactViewController: UIViewController {
-
+    var data: FirebaseData!
+    var contacts: [Sender]!
     override func viewDidLoad() {
         super.viewDidLoad()
+        data = FirebaseData()
+        loadContacts()
 
-        // Do any additional setup after loading the view.
     }
     
     // MARK: Actions
@@ -26,6 +29,14 @@ class ChooseContactViewController: UIViewController {
             defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
         }
         performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
+    }
+    
+    // MARK: Private methods
+    func loadContacts() {
+        data.observeContacts { contacts in
+            self.contacts = contacts
+            print("The contacts are: \(self.contacts!)")
+        }
     }
     
 

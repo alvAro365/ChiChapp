@@ -12,24 +12,8 @@ import Firebase
 
 class FirebaseData {
 
-    func observeFirebase(completion: @escaping ([MessageType]) -> Void) {
+    func observeMessages(completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
-        /*
-        let query = Constants.refs.databaseChats.queryLimited(toLast: 10)
-        _ = query.observe(.childAdded, with: { snapshot in
-            if let data = snapshot.value as? [String: String],
-                let senderID  = data["title"] {
-                
-                let sender = Sender(id: senderID , displayName: "Alvar")
-                
-                let attributedText = NSAttributedString(string: senderID, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue ])
-                let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: "1234", date: Date())
-                messages.append(message)
-            }
-            completion(messages)
-        })
- */
-
         let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: Constants.userDefaults.chatKey)!).queryLimited(toLast: 5)
         _ = query.observe(.childAdded, with: { snapshot in
             if let data = snapshot.value as? [String: String],
@@ -45,6 +29,22 @@ class FirebaseData {
             completion(messages)
             
         })
-
     }
+    
+    func observeContacts(completion: @escaping ([Sender]) -> Void) {
+        var contacts = [Sender]()
+        let usersRef = Constants.refs.databaseUsers
+        _  = usersRef.observe(.childAdded, with: { snapshot in
+            if let data = snapshot.value as? [String: String],
+                let displayName = data[Constants.user.displayName],
+                let id = data[Constants.user.id] {
+                let user = Sender(id: id, displayName: displayName)
+                contacts.append(user)
+            }
+            completion(contacts)
+        })
+        
+        
+    }
+    
 }
