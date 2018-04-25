@@ -12,9 +12,9 @@ import Firebase
 
 class FirebaseData {
 
-    func observeMessages(completion: @escaping ([MessageType]) -> Void) {
+    static func observeMessages(completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
-        let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: Constants.userDefaults.chatOneKey)!).queryLimited(toLast: 5)
+        let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: Constants.userDefaults.chatKey)!).queryLimited(toLast: 5)
         _ = query.observe(.childAdded, with: { snapshot in
             if let data = snapshot.value as? [String: String],
                 let senderId = data[Constants.messages.senderId],
@@ -31,22 +31,83 @@ class FirebaseData {
         })
     }
     
-    func observeContacts(completion: @escaping ([Sender]) -> Void) {
+    static func observeUsers(completion: @escaping ([Sender]) -> Void) {
         var contacts = [Sender]()
         let usersRef = Constants.refs.databaseUsers
-        _  = usersRef.observe(.childAdded, with: { snapshot in
-            if let data = snapshot.value as? [String: String],
-                let displayName = data[Constants.user.displayName],
-                let id = data[Constants.user.id] {
+        
+        // TODO: contacts will not load after sign out because snapshot value is not array of dictionaries after
+        usersRef.observe(.childAdded, with: { snapshot in
+            if let data = snapshot.value as? NSDictionary,
+                let displayName = data[Constants.user.displayName] as? String,
+                let id = data[Constants.user.id] as? String {
                 let user = Sender(id: id, displayName: displayName)
                 contacts.append(user)
             }
             completion(contacts)
         })
     }
- /*
-    func addContactWithChatId() -> <#return type#> {
-        <#function body#>
+    
+    static func getChatId(currentUserId: String, contactId: String?) {
+       
+        let currentUserRef = Constants.refs.databaseUsers.child(currentUserId)
+        let defaults = UserDefaults.standard
+        currentUserRef.observe(.value, with: { (snapshot) in
+            if snapshot.hasChild("chats") {
+                let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
+                let chatKey = value?[contactId!]
+                print("**** Contact:\(String(describing: contactId)) ******* Key:\(String(describing: chatKey))")
+                defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
+                
+            } else {
+//                let chat = Constants.refs.databaseChats.childByAutoId().key
+//                print("chat is: \(chat)")
+//                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
+            }
+        })
     }
-    */
 }
+
+  /*
+    static func getChatId(currentUserId: String, contactId: String?, completion: @escaping (String) -> Void) {
+        
+        let currentUserRef = Constants.refs.databaseUsers.child(currentUserId)
+        let defaults = UserDefaults.standard
+        var chat = ""
+        if contactId != nil {
+            currentUserRef.observe(.value, with: { (snapshot) in
+                if snapshot.hasChild("chats") {
+                    let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
+                    let chatKey = value?[contactId!]!
+                    print("**** Contact:\(String(describing: contactId)) ******* Key:\(String(describing: chatKey))")
+//                    chat = chatKey!
+                    defaults.set(chat, forKey: Constants.userDefaults.chatKey)
+                    
+                } else {
+                    let chat = Constants.refs.databaseChats.childByAutoId().key
+                    print("chat is: \(chat)")
+                    defaults.set(chat, forKey: Constants.userDefaults.chatKey)
+                }
+                completion(chat)
+            
+            })
+            /*
+            currentUserRef.observeSingleEvent(of: .value) { snapshot in
+                if snapshot.hasChild("chats") {
+                    let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
+                    let chatKey = value?[contactId!]!
+                    print("**** Contact:\(String(describing: contactId)) ******* Key:\(String(describing: chatKey))")
+                    chat = chatKey!
+                    
+                } else {
+                    let chat = Constants.refs.databaseChats.childByAutoId().key
+                    print("chat is: \(chat)")
+                    defaults.set(chat, forKey: Constants.userDefaults.chatKey)
+                }
+                completion(chat)
+            }
+ */
+        } else {
+            print("No members online")
+        }
+    }
+ */

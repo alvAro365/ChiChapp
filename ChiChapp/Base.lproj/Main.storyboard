@@ -92,7 +92,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="qDf-Bf-BQj">
-                                <rect key="frame" x="8" y="304.5" width="359" height="122"/>
+                                <rect key="frame" x="8" y="350.5" width="359" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Cn-7e-BZ2">
                                         <rect key="frame" x="0.0" y="0.0" width="359" height="30"/>
@@ -100,25 +100,7 @@
                                             <action selector="chatWith:" destination="NoR-uV-312" eventType="touchUpInside" id="d9W-gS-Sit"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O4S-C5-sp6">
-                                        <rect key="frame" x="0.0" y="46" width="359" height="30"/>
-                                        <connections>
-                                            <action selector="chatWith:" destination="NoR-uV-312" eventType="touchUpInside" id="tRT-dR-kJx"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lX3-hN-MhO">
-                                        <rect key="frame" x="0.0" y="92" width="359" height="30"/>
-                                        <connections>
-                                            <action selector="chatWith:" destination="NoR-uV-312" eventType="touchUpInside" id="JW5-ro-SbK"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="0Cn-7e-BZ2" firstAttribute="height" secondItem="O4S-C5-sp6" secondAttribute="height" id="Eaa-Kk-HL5"/>
-                                    <constraint firstItem="O4S-C5-sp6" firstAttribute="height" secondItem="lX3-hN-MhO" secondAttribute="height" id="OfK-zB-muM"/>
-                                    <constraint firstItem="0Cn-7e-BZ2" firstAttribute="width" secondItem="O4S-C5-sp6" secondAttribute="width" id="TSa-a5-DZB"/>
-                                    <constraint firstItem="O4S-C5-sp6" firstAttribute="width" secondItem="lX3-hN-MhO" secondAttribute="width" id="aFW-Wr-Sk3"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -131,8 +113,6 @@
                     </view>
                     <connections>
                         <outlet property="button1" destination="0Cn-7e-BZ2" id="iQJ-b7-nq5"/>
-                        <outlet property="button2" destination="O4S-C5-sp6" id="Ulb-3r-OYK"/>
-                        <outlet property="button3" destination="lX3-hN-MhO" id="YVD-Bm-EpH"/>
                         <segue destination="Ib5-Hh-2X2" kind="presentation" identifier="goToChat" id="lsD-uP-7RT"/>
                     </connections>
                 </viewController>

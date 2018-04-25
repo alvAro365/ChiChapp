@@ -16,12 +16,12 @@ class ChatViewController: MessagesViewController {
     var userName: String!
     var currentUser: Sender!
     var contact: Sender!
-    var data: FirebaseData!
+//    var data: FirebaseData!
     var chatsRef: DatabaseReference!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        data = FirebaseData()
+//        data = FirebaseData()
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -29,6 +29,7 @@ class ChatViewController: MessagesViewController {
         loadUserDefaults()
         createChat()
         loadMessagesFromFirebase()
+//        data.getChatId(currentUserId: currentUser.id, contactId: contact.id)
         
     }
     
@@ -43,9 +44,9 @@ class ChatViewController: MessagesViewController {
     }
     
     func loadMessagesFromFirebase() {
-        data.observeMessages { messages in
+        FirebaseData.observeMessages { messages in
             self.messages = messages
-            print("Messages: \(self.messages)")
+//            print("Messages: \(self.messages)")
             if self.messages.count > 0 {
                 self.messagesCollectionView.insertSections([messages.count - 1])
             }
@@ -54,8 +55,9 @@ class ChatViewController: MessagesViewController {
     }
     
     func loadUserDefaults() {
+        print("Loading user defaults")
         let defaults = UserDefaults.standard
-        let chatKey = defaults.string(forKey: Constants.userDefaults.chatOneKey)
+        let chatKey = defaults.string(forKey: Constants.userDefaults.chatKey)
         chatsRef = Constants.refs.databaseChats.child(chatKey!)
         
         if let id = defaults.string(forKey: Constants.userDefaults.userID),
