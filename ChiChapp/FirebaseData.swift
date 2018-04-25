@@ -11,6 +11,7 @@ import MessageKit
 import Firebase
 
 class FirebaseData {
+    typealias CompletionHandler = (Bool) -> Void
 
     static func observeMessages(completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
@@ -47,18 +48,25 @@ class FirebaseData {
         })
     }
     
-    static func getChatId(currentUserId: String, contactId: String?) {
-       
+    static func getChatId(currentUserId: String, contactId: String?, completionHandler: @escaping CompletionHandler) {
         let currentUserRef = Constants.refs.databaseUsers.child(currentUserId)
         let defaults = UserDefaults.standard
         currentUserRef.observe(.value, with: { (snapshot) in
             if snapshot.hasChild("chats") {
+                print("Chats child found")
                 let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
                 let chatKey = value?[contactId!]
-                print("**** Contact:\(String(describing: contactId)) ******* Key:\(String(describing: chatKey))")
+                print("**** Contact:\(String(describing: contactId!)) ******* Key:\(String(describing: chatKey!))")
                 defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
-                
+                completionHandler(true)
             } else {
+                print("Creating chat")
+                let chat = Constants.refs.databaseChats.childByAutoId().key
+                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
+                let currentUserId = UserDefaults.standard.string(forKey: Constants.userDefaults.userID)
+                // Adds chat key under current user in database
+                Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contactId)!: chat])
+                Constants.refs.databaseUsers.child((contactId)!).child("chats").setValue([currentUserId!: chat])
 //                let chat = Constants.refs.databaseChats.childByAutoId().key
 //                print("chat is: \(chat)")
 //                defaults.set(chat, forKey: Constants.userDefaults.chatKey)

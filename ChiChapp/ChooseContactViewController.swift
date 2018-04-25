@@ -16,7 +16,7 @@ class ChooseContactViewController: UIViewController {
     @IBOutlet weak var button3: UIButton!
 //    var data: FirebaseData!
     var contacts: [Sender]!
-//    var chatKey: String?
+    var chatKey: String?
     var contact: Sender?
     var currentUser: Sender!
     var contactsWithoutCurrentUser: [Sender]!
@@ -35,8 +35,8 @@ class ChooseContactViewController: UIViewController {
         switch button {
         case button1:
             print("Button1 pressed")
-            self.getChatKey()
-            let chat = defaults.string(forKey: Constants.userDefaults.chatKey)
+            getChatKey()
+//            let chat = defaults.string(forKey: Constants.userDefaults.chatKey)
 
             
 //            print("The chat key is: \(String(describing: chat))")
@@ -48,19 +48,20 @@ class ChooseContactViewController: UIViewController {
 //            Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contact?.id)!: chat])
 //            Constants.refs.databaseUsers.child((contact?.id)!).child("chats").setValue([currentUserId!: chat])
 //            performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-            if chat == nil {
-                let chat = Constants.refs.databaseChats.childByAutoId().key
-                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-                let currentUserId = UserDefaults.standard.string(forKey: Constants.userDefaults.userID)
-                // Adds chat key under current user in database
-                _ = Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contact?.id)!: chat])
-                _ = Constants.refs.databaseUsers.child((contact?.id)!).child("chats").setValue([currentUserId!: chat])
-                performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-
-            } else {
+//            if chat == nil {
+//                print("Chat is nil??")
+//                let chat = Constants.refs.databaseChats.childByAutoId().key
+//                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
+//                let currentUserId = UserDefaults.standard.string(forKey: Constants.userDefaults.userID)
+//                // Adds chat key under current user in database
+//                _ = Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contact?.id)!: chat])
+//                _ = Constants.refs.databaseUsers.child((contact?.id)!).child("chats").setValue([currentUserId!: chat])
+//                performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
+//
+//            } else {
 //                defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
-                performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-            }
+//                performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
+//            }
         default:
             fatalError("Unknown button pressed")
         }
@@ -102,7 +103,15 @@ class ChooseContactViewController: UIViewController {
         print("Getting chat key")
         let defaults = UserDefaults.standard
         let currentUserId = defaults.string(forKey: Constants.userDefaults.userID)
-        FirebaseData.getChatId(currentUserId: currentUserId!, contactId: contact?.id)
+        FirebaseData.getChatId(currentUserId: currentUserId!, contactId: contact?.id) { (success) in
+            if success {
+                print("success")
+                self.performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
+            } else {
+                print("failed")
+            }
+        }
+
     }
     
     func showContacts() {
