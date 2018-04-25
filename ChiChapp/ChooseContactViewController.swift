@@ -14,7 +14,6 @@ class ChooseContactViewController: UIViewController {
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button3: UIButton!
-//    var data: FirebaseData!
     var contacts: [Sender]!
     var chatKey: String?
     var contact: Sender?
@@ -22,83 +21,30 @@ class ChooseContactViewController: UIViewController {
     var contactsWithoutCurrentUser: [Sender]!
     override func viewDidLoad() {
         super.viewDidLoad()
-//        data = FirebaseData()
-//        loadUserDefaults()
         loadContacts()
-//        chatKey = getChatKey()
     }
-    
 
     // MARK: Actions
     @IBAction func chatWith(_ button: UIButton) {
-        let defaults = UserDefaults.standard
         switch button {
         case button1:
             print("Button1 pressed")
             getChatKey()
-//            let chat = defaults.string(forKey: Constants.userDefaults.chatKey)
-
-            
-//            print("The chat key is: \(String(describing: chat))")
-//            let chat = Constants.refs.databaseChats.childByAutoId().key
-//            defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-//            let currentUserId = UserDefaults.standard.string(forKey: Constants.userDefaults.userID)
-            
-
-//            Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contact?.id)!: chat])
-//            Constants.refs.databaseUsers.child((contact?.id)!).child("chats").setValue([currentUserId!: chat])
-//            performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-//            if chat == nil {
-//                print("Chat is nil??")
-//                let chat = Constants.refs.databaseChats.childByAutoId().key
-//                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-//                let currentUserId = UserDefaults.standard.string(forKey: Constants.userDefaults.userID)
-//                // Adds chat key under current user in database
-//                _ = Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contact?.id)!: chat])
-//                _ = Constants.refs.databaseUsers.child((contact?.id)!).child("chats").setValue([currentUserId!: chat])
-//                performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-//
-//            } else {
-//                defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
-//                performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-//            }
         default:
             fatalError("Unknown button pressed")
         }
     }
     
     // MARK: Private methods
-    func loadUserDefaults() {
-        print("Loading user defaults")
-        let defaults = UserDefaults.standard
-        if let id = defaults.string(forKey: Constants.userDefaults.userID),
-            let name = defaults.string(forKey: Constants.userDefaults.userName) {
-            currentUser = Sender(id: id, displayName: name)
-            title = "Chat: \(String(describing: contact?.displayName))"
-        }
-    }
-    func createChat() {
-        let defaults = UserDefaults.standard
-        let chat = defaults.string(forKey: Constants.userDefaults.chatKey)
-        let chatsRef = Constants.refs.databaseChats.child(chat!)
-        let membersRef = Constants.refs.databaseChatMembers.child(chat!)
-        let members = [currentUser.id: currentUser.displayName, (contact?.id)!: contact?.displayName]
-        let chatsMetaInfo = ["title": currentUser.displayName + " \(String(describing: contact?.displayName))" ]
-        membersRef.setValue(members)
-        chatsRef.setValue(chatsMetaInfo)
-    }
-    
+
     func loadContacts() {
         FirebaseData.observeUsers { contacts in
             self.contacts = contacts
             print("The contacts are: \(String(describing: self.contacts!))")
             self.showContacts()
-//            self.getChatKey()
         }
     }
-    
-    
-    
+
     func getChatKey() {
         print("Getting chat key")
         let defaults = UserDefaults.standard
@@ -111,7 +57,6 @@ class ChooseContactViewController: UIViewController {
                 print("failed")
             }
         }
-
     }
     
     func showContacts() {
@@ -126,8 +71,6 @@ class ChooseContactViewController: UIViewController {
             button1.isEnabled = false
             button1.setTitle("No contacts", for: .disabled)
         }
-        
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -145,5 +88,4 @@ class ChooseContactViewController: UIViewController {
             chatVC.contact = contact
         }
     }
-
 }

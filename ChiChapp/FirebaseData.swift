@@ -67,55 +67,8 @@ class FirebaseData {
                 // Adds chat key under current user in database
                 Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contactId)!: chat])
                 Constants.refs.databaseUsers.child((contactId)!).child("chats").setValue([currentUserId!: chat])
-//                let chat = Constants.refs.databaseChats.childByAutoId().key
-//                print("chat is: \(chat)")
-//                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
             }
         })
     }
 }
 
-  /*
-    static func getChatId(currentUserId: String, contactId: String?, completion: @escaping (String) -> Void) {
-        
-        let currentUserRef = Constants.refs.databaseUsers.child(currentUserId)
-        let defaults = UserDefaults.standard
-        var chat = ""
-        if contactId != nil {
-            currentUserRef.observe(.value, with: { (snapshot) in
-                if snapshot.hasChild("chats") {
-                    let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
-                    let chatKey = value?[contactId!]!
-                    print("**** Contact:\(String(describing: contactId)) ******* Key:\(String(describing: chatKey))")
-//                    chat = chatKey!
-                    defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-                    
-                } else {
-                    let chat = Constants.refs.databaseChats.childByAutoId().key
-                    print("chat is: \(chat)")
-                    defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-                }
-                completion(chat)
-            
-            })
-            /*
-            currentUserRef.observeSingleEvent(of: .value) { snapshot in
-                if snapshot.hasChild("chats") {
-                    let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
-                    let chatKey = value?[contactId!]!
-                    print("**** Contact:\(String(describing: contactId)) ******* Key:\(String(describing: chatKey))")
-                    chat = chatKey!
-                    
-                } else {
-                    let chat = Constants.refs.databaseChats.childByAutoId().key
-                    print("chat is: \(chat)")
-                    defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-                }
-                completion(chat)
-            }
- */
-        } else {
-            print("No members online")
-        }
-    }
- */
