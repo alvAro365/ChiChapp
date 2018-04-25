@@ -10,4 +10,5 @@ pod 'Firebase'
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
 pod 'MessageKit'
+pod 'ISEmojiView'
 end

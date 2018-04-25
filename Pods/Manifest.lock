@@ -38,6 +38,7 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
   - GTMSessionFetcher/Core (1.1.13)
+  - ISEmojiView (0.0.6)
   - leveldb-library (1.20)
   - MessageKit (0.13.1)
   - nanopb (0.3.8):
@@ -50,6 +51,7 @@ DEPENDENCIES:
   - Firebase
   - Firebase/Auth
   - Firebase/Database
+  - ISEmojiView
   - MessageKit
 
 SPEC CHECKSUMS:
@@ -61,10 +63,11 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: 81df5805a08001e69138664bdd02c6719a9ac80f
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMSessionFetcher: 5bb1eae636127de695590f50e7d248483eb891e6
+  ISEmojiView: 2ab7c5ad9c58a318cefcf407af374464ccc56f1d
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   MessageKit: fc74d71d9b05385138d47b3a4b7beef5c687daf1
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
 
-PODFILE CHECKSUM: e964eb49aaa49b0a075ed15695b90d15dfe7a79d
+PODFILE CHECKSUM: d1ed7b3bcec4c629a688d312506ef57fd2597bde
 
 COCOAPODS: 1.4.0

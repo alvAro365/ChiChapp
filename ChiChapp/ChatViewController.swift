@@ -9,8 +9,18 @@
 import UIKit
 import MessageKit
 import Firebase
+import ISEmojiView
 
-class ChatViewController: MessagesViewController {
+class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
+    
+    func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
+        messageInputBar.inputTextView.insertText(emoji)
+    }
+    
+    func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
+        messageInputBar.inputTextView.deleteBackward()
+    }
+    
     var messages: [MessageType] = []
     var userID: String!
     var userName: String!
@@ -20,10 +30,13 @@ class ChatViewController: MessagesViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let emojiView = ISEmojiView()
+        emojiView.delegate = self
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
+        messageInputBar.inputTextView.inputView = emojiView
         loadUserDefaults()
         createChat()
         loadMessagesFromFirebase()
