@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ecj-7R-Wj4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NZD-tq-Jic">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -23,6 +23,7 @@
                                 <state key="normal" title="Sign In"/>
                                 <connections>
                                     <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="NUU-CM-S8z"/>
+                                    <segue destination="NZD-tq-Jic" kind="show" id="0oc-6y-sqS"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -34,9 +35,6 @@
                         <viewLayoutGuide key="safeArea" id="GRt-Vi-TCS"/>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome!" id="k24-lV-pgq"/>
-                    <connections>
-                        <segue destination="NoR-uV-312" kind="show" identifier="chooseContact" id="q1X-39-aqx"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ehE-rT-Hr6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -55,7 +53,7 @@
                     <navigationItem key="navigationItem" id="YVo-UW-bJo">
                         <barButtonItem key="leftBarButtonItem" title="Sign Out" id="7v9-18-mP3">
                             <connections>
-                                <segue destination="oeB-3d-brC" kind="unwind" unwindAction="unwindToSignInSender:" id="VUU-9c-LjG"/>
+                                <segue destination="oeB-3d-brC" kind="unwind" unwindAction="unwindToContactsWithSender:" id="kI7-za-jzA"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -92,7 +90,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="qDf-Bf-BQj">
-                                <rect key="frame" x="8" y="350.5" width="359" height="30"/>
+                                <rect key="frame" x="8" y="328.5" width="359" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Cn-7e-BZ2">
                                         <rect key="frame" x="0.0" y="0.0" width="359" height="30"/>
@@ -113,12 +111,47 @@
                     </view>
                     <connections>
                         <outlet property="button1" destination="0Cn-7e-BZ2" id="iQJ-b7-nq5"/>
-                        <segue destination="Ib5-Hh-2X2" kind="presentation" identifier="goToChat" id="lsD-uP-7RT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FwJ-TK-1Vo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="76" y="34"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="S8T-cN-qcr">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="NZD-tq-Jic" customClass="PageViewController" customModule="ChiChapp" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RBm-md-6iJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-132" y="874"/>
+        </scene>
+        <!--Contact View Controller-->
+        <scene sceneID="8Qu-sq-62C">
+            <objects>
+                <viewController storyboardIdentifier="contactViewController" id="HP7-vq-LdJ" customClass="ContactViewController" customModule="ChiChapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bR7-Ep-fdv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ldw-2J-uDc">
+                                <rect key="frame" x="164" y="318" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="Ib5-Hh-2X2" kind="presentation" id="yGy-pF-a6o"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="AKl-xa-KiC"/>
+                    </view>
+                    <connections>
+                        <outlet property="contactButton" destination="ldw-2J-uDc" id="o0b-Bb-GPU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="InU-zB-UVJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="685.60000000000002" y="869.41529235382313"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sDX-CN-KKF">

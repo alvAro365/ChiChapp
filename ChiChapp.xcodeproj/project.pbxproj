@@ -16,6 +16,8 @@
 		24618E2F20852387007A9D86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24618E2E20852387007A9D86 /* Assets.xcassets */; };
 		246781DC2088992600F2B615 /* CreateUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246781DB2088992600F2B615 /* CreateUserViewController.swift */; };
 		2478D42020852CC100350F7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2478D41F20852CC100350F7F /* GoogleService-Info.plist */; };
+		24D71EB4209300FF00680609 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D71EB3209300FF00680609 /* PageViewController.swift */; };
+		24D71EBA20933B3E00680609 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D71EB920933B3E00680609 /* ContactViewController.swift */; };
 		24DEBD5320876EFB00D8A379 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DEBD5220876EFB00D8A379 /* ChatMessage.swift */; };
 		E7C6FF32D53A263E2BDE4C20 /* Pods_ChiChapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FD24FE7BE550FC2B7BFD08 /* Pods_ChiChapp.framework */; };
 /* End PBXBuildFile section */
@@ -33,6 +35,8 @@
 		24618E3320852387007A9D86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		246781DB2088992600F2B615 /* CreateUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserViewController.swift; sourceTree = "<group>"; };
 		2478D41F20852CC100350F7F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		24D71EB3209300FF00680609 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
+		24D71EB920933B3E00680609 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		24DEBD5220876EFB00D8A379 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		2678A80E19E2FBD289167170 /* Pods-ChiChapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiChapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChiChapp/Pods-ChiChapp.release.xcconfig"; sourceTree = "<group>"; };
 		77E6A87C4C5FBE7E53C980E1 /* Pods-ChiChapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChiChapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChiChapp/Pods-ChiChapp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 				246781DB2088992600F2B615 /* CreateUserViewController.swift */,
 				24035010208B2AFD000A5F5A /* FirebaseData.swift */,
 				24035012208B4F12000A5F5A /* ChooseContactViewController.swift */,
+				24D71EB3209300FF00680609 /* PageViewController.swift */,
+				24D71EB920933B3E00680609 /* ContactViewController.swift */,
 			);
 			path = ChiChapp;
 			sourceTree = "<group>";
@@ -249,8 +255,10 @@
 				24149DD42087456F00DC2854 /* ChatViewController.swift in Sources */,
 				24618E2820852387007A9D86 /* AppDelegate.swift in Sources */,
 				24035013208B4F12000A5F5A /* ChooseContactViewController.swift in Sources */,
+				24D71EBA20933B3E00680609 /* ContactViewController.swift in Sources */,
 				2409BEB92087A1760088829D /* Constants.swift in Sources */,
 				24035011208B2AFD000A5F5A /* FirebaseData.swift in Sources */,
+				24D71EB4209300FF00680609 /* PageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

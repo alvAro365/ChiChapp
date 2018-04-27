@@ -22,10 +22,7 @@ struct ChatMessage: MessageType {
         self.data = data
     }
     
-    init(text: String, sender: Sender, messageId: String, date: Date) {
-        self.init(sender: sender, messageId: messageId, date: date, data: .text(text))
-    }
-    
+
     init(attributedText: NSAttributedString, sender: Sender, messageId: String, date: Date) {
         self.init(sender: sender, messageId: messageId, date: date, data: .attributedText(attributedText))
     }
@@ -34,9 +31,6 @@ struct ChatMessage: MessageType {
         self.init(sender: sender, messageId: messageId, date: date, data: .photo(image))
     }
     
-    init(emoji: String, sender: Sender, messageId: String, date: Date) {
-        self.init(sender: sender, messageId: messageId, date: date, data: .emoji(emoji))
-    }
 }
 
 
