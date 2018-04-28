@@ -50,6 +50,7 @@ class ChooseContactViewController: UIViewController {
         print("Getting chat key")
         let defaults = UserDefaults.standard
         let currentUserId = defaults.string(forKey: Constants.userDefaults.userID)
+        print("Current user id is: \(currentUserId)")
         FirebaseData.getChatId(currentUserId: currentUserId!, contactId: contact?.id) { (success) in
             if success {
                 print("success")

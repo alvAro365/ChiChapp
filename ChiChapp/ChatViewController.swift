@@ -31,7 +31,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
         messageInputBar.delegate = self
         messageInputBar.inputTextView.inputView = emojiView
         loadUserDefaults()
-//        createChat()
+        createChat()
         loadMessagesFromFirebase()
 
     }

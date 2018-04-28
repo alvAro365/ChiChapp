@@ -18,23 +18,55 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-WT-DjQ">
-                                <rect key="frame" x="164" y="318.5" width="47" height="30"/>
-                                <state key="normal" title="Sign In"/>
-                                <connections>
-                                    <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="NUU-CM-S8z"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="80" translatesAutoresizingMaskIntoConstraints="NO" id="eiY-95-prD">
+                                <rect key="frame" x="20" y="185.5" width="335" height="360"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecc-WT-DjQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="30"/>
+                                        <state key="normal" title="Child"/>
+                                        <connections>
+                                            <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="NUU-CM-S8z"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WIo-zm-yaV">
+                                        <rect key="frame" x="0.0" y="110" width="335" height="30"/>
+                                        <state key="normal" title="Dad"/>
+                                        <connections>
+                                            <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="MO7-iW-81B"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4QT-kr-Q3S">
+                                        <rect key="frame" x="0.0" y="220" width="335" height="30"/>
+                                        <state key="normal" title="Mom"/>
+                                        <connections>
+                                            <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="oIm-Iu-XK5"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7G0-kD-7g4">
+                                        <rect key="frame" x="0.0" y="330" width="335" height="30"/>
+                                        <state key="normal" title="Nanny"/>
+                                        <connections>
+                                            <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="bNl-tz-Rp2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Ecc-WT-DjQ" firstAttribute="centerY" secondItem="xZx-SY-BeD" secondAttribute="centerY" id="ALq-Os-4vm"/>
-                            <constraint firstItem="Ecc-WT-DjQ" firstAttribute="centerX" secondItem="xZx-SY-BeD" secondAttribute="centerX" id="YQB-UZ-ESF"/>
+                            <constraint firstItem="GRt-Vi-TCS" firstAttribute="trailing" secondItem="eiY-95-prD" secondAttribute="trailing" constant="20" id="SbL-L7-Bzm"/>
+                            <constraint firstItem="eiY-95-prD" firstAttribute="centerY" secondItem="GRt-Vi-TCS" secondAttribute="centerY" id="cTq-ty-6ZA"/>
+                            <constraint firstItem="eiY-95-prD" firstAttribute="leading" secondItem="GRt-Vi-TCS" secondAttribute="leading" constant="20" id="rYB-Xg-QOJ"/>
+                            <constraint firstItem="eiY-95-prD" firstAttribute="centerX" secondItem="GRt-Vi-TCS" secondAttribute="centerX" id="wsp-eP-WQ9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GRt-Vi-TCS"/>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome!" id="k24-lV-pgq"/>
                     <connections>
+                        <outlet property="childButton" destination="Ecc-WT-DjQ" id="tdN-IO-nMJ"/>
+                        <outlet property="dadButton" destination="WIo-zm-yaV" id="9I3-rj-bg3"/>
+                        <outlet property="momButton" destination="4QT-kr-Q3S" id="C8w-XV-wrj"/>
+                        <outlet property="nannyButton" destination="7G0-kD-7g4" id="8AJ-3P-T7f"/>
                         <segue destination="NZD-tq-Jic" kind="show" identifier="chooseContact" id="ND5-j1-7hB"/>
                     </connections>
                 </viewController>

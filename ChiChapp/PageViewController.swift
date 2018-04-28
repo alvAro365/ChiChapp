@@ -96,16 +96,16 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
     }
     
     func initializeViewControllers() {
-        
-        for contact in contactsWithoutCurrentUser {
-            let contactPage = self.storyboard?.instantiateViewController(withIdentifier: Constants.viewControllers.contact) as! ContactViewController
-            contactPage.contact = contact
-            contactPage.backGroundColor = UIColor.yellow
-            self.pages.append(contactPage)
+        if contacts.count > 0 {
+            for contact in contactsWithoutCurrentUser {
+                let contactPage = self.storyboard?.instantiateViewController(withIdentifier: Constants.viewControllers.contact) as! ContactViewController
+                contactPage.contact = contact
+                contactPage.backGroundColor = UIColor.yellow
+                self.pages.append(contactPage)
+            }
+            setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
+            print("Initialized")
         }
-
-        setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
-        print("Initialized")
     }
     func getContactsWithoutCurrentUser() {
         contactsWithoutCurrentUser = contacts.filter { $0.id != UserDefaults.standard.string(forKey: Constants.userDefaults.userID) }

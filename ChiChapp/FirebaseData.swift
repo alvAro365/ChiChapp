@@ -11,6 +11,35 @@ import MessageKit
 import Firebase
 
 class FirebaseData {
+    
+    static func createDefaultUsers() -> [Sender] {
+        var contacts = [Sender]()
+        let currentSender = addUserToFirebase(displayName: "Child")
+        saveCurrentUser(sender: currentSender)
+
+        contacts.append(currentSender)
+        contacts.append(addUserToFirebase(displayName: "Dad"))
+        contacts.append(addUserToFirebase(displayName: "Mom"))
+        contacts.append(addUserToFirebase(displayName: "Nanny"))
+        return contacts
+    }
+    
+    private static func saveCurrentUser(sender: Sender) {
+        let defaults = UserDefaults.standard
+        defaults.set(sender.displayName, forKey: Constants.userDefaults.userName)
+        defaults.set(sender.id, forKey: Constants.userDefaults.userID)
+    }
+    
+    private static func addUserToFirebase(displayName: String) -> Sender {
+        let reference = Constants.refs.databaseUsers.childByAutoId()
+        print("*****New user with ID: \(reference.key)")
+        let sender = Sender(id: reference.key, displayName: displayName)
+        let userFirebase = ["name": displayName , "id": reference.key] as [String : String]
+        reference.setValue(userFirebase)
+        return sender
+
+    }
+    
     typealias CompletionHandler = (Bool) -> Void
 
     static func observeMessages(completion: @escaping ([MessageType]) -> Void) {
@@ -55,18 +84,22 @@ class FirebaseData {
 //            }
 //            completion(contacts)
 //        }
-        usersRef.observe(.value) { (snapshot) in
+        usersRef.observeSingleEvent(of: .value) { (snapshot) in
             print("Amount of users: \(snapshot.childrenCount)")
-            for child in snapshot.children {
-                if let snap = child as? DataSnapshot,
-                let data = snap.value as? [String: Any],
-                let displayName = data[Constants.user.displayName] as? String,
-                    let id = data[Constants.user.id] as? String {
-                    let user = Sender(id: id, displayName: displayName)
-                    contacts.append(user)
-                } else {
-                    print("Creating contact failed")
+            if snapshot.childrenCount > 0 {
+                for child in snapshot.children {
+                    if let snap = child as? DataSnapshot,
+                        let data = snap.value as? [String: Any],
+                        let displayName = data[Constants.user.displayName] as? String,
+                        let id = data[Constants.user.id] as? String {
+                        let user = Sender(id: id, displayName: displayName)
+                        contacts.append(user)
+                    } else {
+                        print("Creating contact failed")
+                    }
                 }
+            } else {
+                contacts = FirebaseData.createDefaultUsers()
             }
             completion(contacts)
         }
