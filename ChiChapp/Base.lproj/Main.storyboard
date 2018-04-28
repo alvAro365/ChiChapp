@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NZD-tq-Jic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ecj-7R-Wj4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -23,7 +23,6 @@
                                 <state key="normal" title="Sign In"/>
                                 <connections>
                                     <action selector="showAlert:" destination="1DR-sa-jM1" eventType="touchUpInside" id="NUU-CM-S8z"/>
-                                    <segue destination="NZD-tq-Jic" kind="show" id="0oc-6y-sqS"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -35,6 +34,9 @@
                         <viewLayoutGuide key="safeArea" id="GRt-Vi-TCS"/>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome!" id="k24-lV-pgq"/>
+                    <connections>
+                        <segue destination="NZD-tq-Jic" kind="show" identifier="chooseContact" id="ND5-j1-7hB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ehE-rT-Hr6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -133,20 +135,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ldw-2J-uDc">
-                                <rect key="frame" x="164" y="318" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ldw-2J-uDc">
+                                <rect key="frame" x="16" y="328.5" width="343" height="30"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <segue destination="Ib5-Hh-2X2" kind="presentation" id="yGy-pF-a6o"/>
+                                    <action selector="chatWiht:" destination="HP7-vq-LdJ" eventType="touchUpInside" id="Ro6-cu-WNc"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ldw-2J-uDc" firstAttribute="centerY" secondItem="AKl-xa-KiC" secondAttribute="centerY" id="J46-0e-uxH"/>
+                            <constraint firstItem="ldw-2J-uDc" firstAttribute="leading" secondItem="AKl-xa-KiC" secondAttribute="leading" constant="16" id="a0M-SN-B5G"/>
+                            <constraint firstItem="AKl-xa-KiC" firstAttribute="trailing" secondItem="ldw-2J-uDc" secondAttribute="trailing" constant="16" id="zH2-jF-jcw"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="AKl-xa-KiC"/>
                     </view>
                     <connections>
                         <outlet property="contactButton" destination="ldw-2J-uDc" id="o0b-Bb-GPU"/>
+                        <segue destination="Ib5-Hh-2X2" kind="presentation" identifier="goToChat" id="6MO-oU-6Sw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="InU-zB-UVJ" userLabel="First Responder" sceneMemberID="firstResponder"/>

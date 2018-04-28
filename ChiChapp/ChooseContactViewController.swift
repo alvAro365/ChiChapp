@@ -14,6 +14,7 @@ class ChooseContactViewController: UIViewController {
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button3: UIButton!
+    var counter = 0
     var contacts: [Sender]!
     var chatKey: String?
     var contact: Sender?
@@ -82,7 +83,6 @@ class ChooseContactViewController: UIViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.segues.toChatVC {
-            
             let navigationController = segue.destination as! UINavigationController
             let chatVC = navigationController.topViewController as! ChatViewController
             chatVC.contact = contact

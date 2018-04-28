@@ -41,4 +41,8 @@ struct Constants {
         static let displayName = "name"
     
     }
+    
+    struct viewControllers {
+        static let contact = "contactViewController"
+    }
 }

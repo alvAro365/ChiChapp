@@ -13,14 +13,7 @@ import ISEmojiView
 
 class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
     
-    func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
-        messageInputBar.inputTextView.insertText(emoji)
-    }
-    
-    func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
-        messageInputBar.inputTextView.deleteBackward()
-    }
-    
+
     var messages: [MessageType] = []
     var userID: String!
     var userName: String!
@@ -37,9 +30,9 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
         messageInputBar.inputTextView.inputView = emojiView
-//        loadUserDefaults()
+        loadUserDefaults()
 //        createChat()
-//        loadMessagesFromFirebase()
+        loadMessagesFromFirebase()
 
     }
     
@@ -74,6 +67,14 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
             currentUser = Sender(id: id, displayName: name)
             title = "Chat: \(contact.displayName)"
         }
+    }
+    // MARK: Emoji methods
+    func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
+        messageInputBar.inputTextView.insertText(emoji)
+    }
+    
+    func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
+        messageInputBar.inputTextView.deleteBackward()
     }
 
     override func didReceiveMemoryWarning() {

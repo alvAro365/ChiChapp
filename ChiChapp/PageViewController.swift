@@ -7,12 +7,20 @@
 //
 
 import UIKit
+import Firebase
+import MessageKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
-    
+    var count = 0
     var pages = [UIViewController]()
     var sender = ["Alvar", "Noah"]
     let pageControl = UIPageControl()
+    var contacts: [Sender]!
+    var chatKey: String?
+    var contact: Sender?
+    var currentUser: Sender!
+    var contactsWithoutCurrentUser: [Sender]!
+    let initialPage = 0
     
     // MARK: Delegate methods
     
@@ -44,32 +52,39 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
             if let viewControllerIndex = self.pages.index(of: viewControllers[0]) {
                 self.pageControl.currentPage = viewControllerIndex
             }
-            
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.dataSource = self
         self.delegate = self
-        let initialPage = 0
-        let page1 = self.storyboard?.instantiateViewController(withIdentifier: "contactViewController") as! ContactViewController
-        page1.contact = sender[0]
-        page1.backGroundColor = UIColor.brown
-        let page2 = self.storyboard?.instantiateViewController(withIdentifier: "contactViewController") as! ContactViewController
-        page2.contact = sender[1]
-        page2.backGroundColor = UIColor.red
-        
-        self.pages.append(page1)
-        self.pages.append(page2)
-        setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
-        
-        // pageControle
+//        loadContacts()
+        getContactsWithoutCurrentUser()
+        initializeViewControllers()
+        setupPageControl()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: Helper methods
+    
+    func loadContacts() {
+        FirebaseData.observeUsers { contacts in
+                self.contacts = contacts
+                print("The contacts are: \(String(describing: self.contacts!))")
+                self.initializeViewControllers()
+        }
+    }
+    
+    func setupPageControl() {
         self.pageControl.frame = CGRect()
         self.pageControl.numberOfPages = self.pages.count
-        self.pageControl.currentPageIndicatorTintColor = UIColor.black
-        self.pageControl.pageIndicatorTintColor = UIColor.gray
+        self.pageControl.currentPageIndicatorTintColor = UIColor.white
+        self.pageControl.pageIndicatorTintColor = UIColor.blue
         self.pageControl.currentPage = initialPage
         self.view.addSubview(self.pageControl)
         
@@ -78,16 +93,23 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         self.pageControl.widthAnchor.constraint(equalTo: self.view.widthAnchor, constant: -20).isActive = true
         self.pageControl.heightAnchor.constraint(equalToConstant: 20).isActive = true
         self.pageControl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        
-
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
+    func initializeViewControllers() {
+        
+        for contact in contactsWithoutCurrentUser {
+            let contactPage = self.storyboard?.instantiateViewController(withIdentifier: Constants.viewControllers.contact) as! ContactViewController
+            contactPage.contact = contact
+            contactPage.backGroundColor = UIColor.yellow
+            self.pages.append(contactPage)
+        }
 
+        setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
+        print("Initialized")
+    }
+    func getContactsWithoutCurrentUser() {
+        contactsWithoutCurrentUser = contacts.filter { $0.id != UserDefaults.standard.string(forKey: Constants.userDefaults.userID) }
+    }
 
     /*
     // MARK: - Navigation

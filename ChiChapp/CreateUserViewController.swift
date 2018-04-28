@@ -14,9 +14,11 @@ class CreateUserViewController: UIViewController {
     
     var userName: String!
     var userId: String!
+    var contacts: [Sender]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadContacts()
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,7 +57,12 @@ class CreateUserViewController: UIViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        if segue.identifier == Constants.segues.chooseContactVC {
+            let contactsViewController = segue.destination as! PageViewController
+            contactsViewController.contacts = self.contacts
+        } else {
+            print("Unknow segue triggered")
+        }
 
     }
  
@@ -63,5 +70,12 @@ class CreateUserViewController: UIViewController {
     // MARK: - Actions
     @IBAction func unwindToSignIn(sender: UIStoryboardSegue) {
         
+    }
+    
+    func loadContacts() {
+        FirebaseData.observeUsers { contacts in
+            self.contacts = contacts
+            print("The contacts are: \(String(describing: self.contacts!))")
+        }
     }
 }

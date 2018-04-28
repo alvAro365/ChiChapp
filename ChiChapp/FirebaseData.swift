@@ -36,16 +36,40 @@ class FirebaseData {
         var contacts = [Sender]()
         let usersRef = Constants.refs.databaseUsers
         
-        // TODO: contacts will not load after sign out because snapshot value is not array of dictionaries after
-        usersRef.observe(.childAdded, with: { snapshot in
-            if let data = snapshot.value as? NSDictionary,
+         // TODO: contacts will not load after sign out because snapshot value is not array of dictionaries after
+//        usersRef.observe(.childAdded, with: { snapshot in
+//            if let data = snapshot.value as? NSDictionary,
+//                let displayName = data[Constants.user.displayName] as? String,
+//                let id = data[Constants.user.id] as? String {
+//                let user = Sender(id: id, displayName: displayName)
+//                contacts.append(user)
+//            }
+//                completion(contacts)
+//        })
+//        usersRef.observeSingleEvent(of: .childAdded) { (snapshot) in
+//            if let data = snapshot.value as? [String: String],
+//            let displayName = data[Constants.user.displayName],
+//                let id = data[Constants.user.id] {
+//                let user = Sender(id: id, displayName: displayName)
+//                contacts.append(user)
+//            }
+//            completion(contacts)
+//        }
+        usersRef.observe(.value) { (snapshot) in
+            print("Amount of users: \(snapshot.childrenCount)")
+            for child in snapshot.children {
+                if let snap = child as? DataSnapshot,
+                let data = snap.value as? [String: Any],
                 let displayName = data[Constants.user.displayName] as? String,
-                let id = data[Constants.user.id] as? String {
-                let user = Sender(id: id, displayName: displayName)
-                contacts.append(user)
+                    let id = data[Constants.user.id] as? String {
+                    let user = Sender(id: id, displayName: displayName)
+                    contacts.append(user)
+                } else {
+                    print("Creating contact failed")
+                }
             }
             completion(contacts)
-        })
+        }
     }
     
     static func getChatId(currentUserId: String, contactId: String?, completionHandler: @escaping CompletionHandler) {
