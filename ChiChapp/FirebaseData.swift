@@ -11,13 +11,14 @@ import MessageKit
 import Firebase
 
 class FirebaseData {
+
+    static func createDefaultUser() {
+        let currentSender = Sender(id: UUID().uuidString, displayName: "Child")
+        saveCurrentUser(sender: currentSender)
+    }
     
     static func createDefaultUsers() -> [Sender] {
         var contacts = [Sender]()
-        let currentSender = addUserToFirebase(displayName: "Child")
-        saveCurrentUser(sender: currentSender)
-
-        contacts.append(currentSender)
         contacts.append(addUserToFirebase(displayName: "Dad"))
         contacts.append(addUserToFirebase(displayName: "Mom"))
         contacts.append(addUserToFirebase(displayName: "Nanny"))
@@ -30,21 +31,29 @@ class FirebaseData {
         defaults.set(sender.id, forKey: Constants.userDefaults.userID)
     }
     
+    private static func getCurrentUser() -> Sender {
+        let defaults = UserDefaults.standard
+        let name = defaults.string(forKey: Constants.userDefaults.userName)
+        let id = defaults.string(forKey: Constants.userDefaults.userID)
+        
+        return Sender(id: id!, displayName: name!)
+    }
+
     private static func addUserToFirebase(displayName: String) -> Sender {
         let reference = Constants.refs.databaseUsers.childByAutoId()
         print("*****New user with ID: \(reference.key)")
         let sender = Sender(id: reference.key, displayName: displayName)
-        let userFirebase = ["name": displayName , "id": reference.key] as [String : String]
+        let chatKey = createChatKey(reference, sender)
+        let userFirebase = ["name": displayName , "id": reference.key, "chat": chatKey] as [String : String]
         reference.setValue(userFirebase)
         return sender
-
     }
     
     typealias CompletionHandler = (Bool) -> Void
 
-    static func observeMessages(completion: @escaping ([MessageType]) -> Void) {
+    static func observeMessages(_ contact: Sender, completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
-        let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: Constants.userDefaults.chatKey)!).queryLimited(toLast: 5)
+        let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: contact.id)!).queryLimited(toLast: 5)
         _ = query.observe(.childAdded, with: { snapshot in
             if let data = snapshot.value as? [String: String],
                 let senderId = data[Constants.messages.senderId],
@@ -57,33 +66,14 @@ class FirebaseData {
                 messages.append(message)
             }
             completion(messages)
-            
         })
     }
     
     static func observeUsers(completion: @escaping ([Sender]) -> Void) {
         var contacts = [Sender]()
         let usersRef = Constants.refs.databaseUsers
+        let defaults = UserDefaults.standard
         
-         // TODO: contacts will not load after sign out because snapshot value is not array of dictionaries after
-//        usersRef.observe(.childAdded, with: { snapshot in
-//            if let data = snapshot.value as? NSDictionary,
-//                let displayName = data[Constants.user.displayName] as? String,
-//                let id = data[Constants.user.id] as? String {
-//                let user = Sender(id: id, displayName: displayName)
-//                contacts.append(user)
-//            }
-//                completion(contacts)
-//        })
-//        usersRef.observeSingleEvent(of: .childAdded) { (snapshot) in
-//            if let data = snapshot.value as? [String: String],
-//            let displayName = data[Constants.user.displayName],
-//                let id = data[Constants.user.id] {
-//                let user = Sender(id: id, displayName: displayName)
-//                contacts.append(user)
-//            }
-//            completion(contacts)
-//        }
         usersRef.observeSingleEvent(of: .value) { (snapshot) in
             print("Amount of users: \(snapshot.childrenCount)")
             if snapshot.childrenCount > 0 {
@@ -91,41 +81,35 @@ class FirebaseData {
                     if let snap = child as? DataSnapshot,
                         let data = snap.value as? [String: Any],
                         let displayName = data[Constants.user.displayName] as? String,
-                        let id = data[Constants.user.id] as? String {
+                        let id = data[Constants.user.id] as? String,
+                        let chatKey = data["chat"] as? String {
                         let user = Sender(id: id, displayName: displayName)
                         contacts.append(user)
+                        defaults.set(chatKey, forKey: user.id)
+                        print("Name: \(displayName), ChatKey: \(chatKey)")
                     } else {
                         print("Creating contact failed")
                     }
                 }
             } else {
-                contacts = FirebaseData.createDefaultUsers()
+                self.createDefaultUser()
+                contacts = self.createDefaultUsers()
             }
             completion(contacts)
         }
     }
     
-    static func getChatId(currentUserId: String, contactId: String?, completionHandler: @escaping CompletionHandler) {
-        let currentUserRef = Constants.refs.databaseUsers.child(currentUserId)
+    private static func createChatKey(_ reference: DatabaseReference, _ contact: Sender) -> String {
+        print("Creating chat key")
         let defaults = UserDefaults.standard
-        currentUserRef.observe(.value, with: { (snapshot) in
-            if snapshot.hasChild("chats") {
-                print("Chats child found")
-                let value =  snapshot.childSnapshot(forPath: "chats").value as? [String: String]
-                let chatKey = value?[contactId!]
-                print("**** Contact:\(String(describing: contactId!)) ******* Key:\(String(describing: chatKey!))")
-                defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
-                completionHandler(true)
-            } else {
-                print("Creating chat")
-                let chat = Constants.refs.databaseChats.childByAutoId().key
-                defaults.set(chat, forKey: Constants.userDefaults.chatKey)
-                let currentUserId = UserDefaults.standard.string(forKey: Constants.userDefaults.userID)
-                // Adds chat key under current user in database
-                Constants.refs.databaseUsers.child(currentUserId!).child("chats").setValue([(contactId)!: chat])
-                Constants.refs.databaseUsers.child((contactId)!).child("chats").setValue([currentUserId!: chat])
-            }
-        })
+        let chatRef = Constants.refs.databaseChats.childByAutoId()
+        let chatsMetaInfo = ["title": "chat"]
+        let membersRef = Constants.refs.databaseChatMembers.child(chatRef.key)
+        let members = [getCurrentUser().id: getCurrentUser().displayName, contact.id: contact.displayName]
+        membersRef.setValue(members)
+        chatRef.setValue(chatsMetaInfo)
+        defaults.set(chatRef.key, forKey: contact.id)
+        return chatRef.key
     }
 }
 

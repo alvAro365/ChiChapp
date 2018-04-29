@@ -16,6 +16,7 @@ class ContactViewController: UIViewController {
     var backGroundColor: UIColor?
     var contact: Sender?
     var contacts: [Sender]!
+    var defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +28,8 @@ class ContactViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.segues.toChatVC {
             let chatNavigationController = segue.destination as! UINavigationController
@@ -40,28 +39,9 @@ class ContactViewController: UIViewController {
     }
     
     @IBAction func chatWiht(_ button: UIButton) {
-        getChatKey()
-        
-    }
-    
-    func getChatKey() {
-        print("Getting chat key")
-        let defaults = UserDefaults.standard
-        let currentUserId = defaults.string(forKey: Constants.userDefaults.userID)
-        FirebaseData.getChatId(currentUserId: currentUserId!, contactId: contact?.id) { (success) in
-            if success {
-                print("success")
-                self.performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
-            } else {
-                print("failed")
-            }
-        }
-    }
-    
-
-
-    @IBAction func unwindToContacts(sender: UIStoryboardSegue) {
-        
+        let chatKey = defaults.string(forKey: contact!.id)
+        defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
+        self.performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
     }
 }
 

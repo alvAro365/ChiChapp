@@ -27,6 +27,7 @@ struct Constants {
     struct segues {
         static let toChatVC = "goToChat"
         static let chooseContactVC = "chooseContact"
+        static let userToChat = "userToChat"
     }
     
     struct messages {

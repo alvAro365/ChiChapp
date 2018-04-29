@@ -68,6 +68,7 @@
                         <outlet property="momButton" destination="4QT-kr-Q3S" id="C8w-XV-wrj"/>
                         <outlet property="nannyButton" destination="7G0-kD-7g4" id="8AJ-3P-T7f"/>
                         <segue destination="NZD-tq-Jic" kind="show" identifier="chooseContact" id="ND5-j1-7hB"/>
+                        <segue destination="Ib5-Hh-2X2" kind="presentation" identifier="userToChat" id="qQq-NX-whQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ehE-rT-Hr6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -85,15 +86,14 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="YVo-UW-bJo">
-                        <barButtonItem key="leftBarButtonItem" title="Sign Out" id="7v9-18-mP3">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="7v9-18-mP3">
                             <connections>
-                                <segue destination="oeB-3d-brC" kind="unwind" unwindAction="unwindToContactsWithSender:" id="kI7-za-jzA"/>
+                                <action selector="dismissViewController:" destination="BYZ-38-t0r" id="QgM-dn-a16"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <exit id="oeB-3d-brC" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1721" y="34"/>
         </scene>
@@ -114,42 +114,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JId-oQ-eaF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1454" y="34"/>
-        </scene>
-        <!--Choose contact-->
-        <scene sceneID="z70-oO-HO5">
-            <objects>
-                <viewController title="Choose contact" id="NoR-uV-312" customClass="ChooseContactViewController" customModule="ChiChapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Pyf-mm-qIJ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="qDf-Bf-BQj">
-                                <rect key="frame" x="8" y="328.5" width="359" height="30"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Cn-7e-BZ2">
-                                        <rect key="frame" x="0.0" y="0.0" width="359" height="30"/>
-                                        <connections>
-                                            <action selector="chatWith:" destination="NoR-uV-312" eventType="touchUpInside" id="d9W-gS-Sit"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="a3z-tL-bcb" firstAttribute="trailing" secondItem="qDf-Bf-BQj" secondAttribute="trailing" constant="8" id="4Df-wt-7aa"/>
-                            <constraint firstItem="qDf-Bf-BQj" firstAttribute="leading" secondItem="a3z-tL-bcb" secondAttribute="leading" constant="8" id="OMc-sc-Zxe"/>
-                            <constraint firstItem="qDf-Bf-BQj" firstAttribute="centerY" secondItem="a3z-tL-bcb" secondAttribute="centerY" id="kGg-1R-Sx6"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="a3z-tL-bcb"/>
-                    </view>
-                    <connections>
-                        <outlet property="button1" destination="0Cn-7e-BZ2" id="iQJ-b7-nq5"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FwJ-TK-1Vo" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="76" y="34"/>
         </scene>
         <!--Page View Controller-->
         <scene sceneID="S8T-cN-qcr">
@@ -211,4 +175,7 @@
             <point key="canvasLocation" x="930" y="34"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="qQq-NX-whQ"/>
+    </inferredMetricsTieBreakers>
 </document>

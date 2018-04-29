@@ -11,14 +11,10 @@ import Firebase
 import MessageKit
 
 class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
-    var count = 0
     var pages = [UIViewController]()
-    var sender = ["Alvar", "Noah"]
     let pageControl = UIPageControl()
     var contacts: [Sender]!
-    var chatKey: String?
     var contact: Sender?
-    var currentUser: Sender!
     var contactsWithoutCurrentUser: [Sender]!
     let initialPage = 0
     
@@ -59,7 +55,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         super.viewDidLoad()
         self.dataSource = self
         self.delegate = self
-//        loadContacts()
         getContactsWithoutCurrentUser()
         initializeViewControllers()
         setupPageControl()
@@ -67,11 +62,9 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: Helper methods
-    
     func loadContacts() {
         FirebaseData.observeUsers { contacts in
                 self.contacts = contacts

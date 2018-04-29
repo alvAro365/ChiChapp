@@ -13,13 +13,10 @@ import ISEmojiView
 
 class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
     
-
     var messages: [MessageType] = []
-    var userID: String!
-    var userName: String!
     var currentUser: Sender!
     var contact: Sender!
-    var chatsRef: DatabaseReference!
+    var chatKey: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,23 +28,17 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
         messageInputBar.delegate = self
         messageInputBar.inputTextView.inputView = emojiView
         loadUserDefaults()
-        createChat()
         loadMessagesFromFirebase()
 
     }
-    
-    // MARK: Private methods
-    // TODO: Move createChat to FirebaseData
-    func createChat() {
-        let membersRef = Constants.refs.databaseChatMembers.child(chatsRef.key)
-        let members = [currentUser.id: currentUser.displayName, contact.id: contact.displayName]
-        let chatsMetaInfo = ["title": currentUser.displayName + " \(contact.displayName)" ]
-        membersRef.setValue(members)
-        chatsRef.setValue(chatsMetaInfo)
+    @IBAction func dismissViewController(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
     }
     
+    // MARK: Helper methods
+
     func loadMessagesFromFirebase() {
-        FirebaseData.observeMessages { messages in
+        FirebaseData.observeMessages(contact){ messages in
             self.messages = messages
             if self.messages.count > 0 {
                 self.messagesCollectionView.insertSections([messages.count - 1])
@@ -59,15 +50,15 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
     func loadUserDefaults() {
         print("Loading user defaults")
         let defaults = UserDefaults.standard
-        let chatKey = defaults.string(forKey: Constants.userDefaults.chatKey)
-        chatsRef = Constants.refs.databaseChats.child(chatKey!)
-        
+        chatKey = defaults.string(forKey: Constants.userDefaults.chatKey)
+
         if let id = defaults.string(forKey: Constants.userDefaults.userID),
             let name = defaults.string(forKey: Constants.userDefaults.userName) {
             currentUser = Sender(id: id, displayName: name)
             title = "Chat: \(contact.displayName)"
         }
     }
+    
     // MARK: Emoji methods
     func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
         messageInputBar.inputTextView.insertText(emoji)
@@ -127,7 +118,7 @@ extension ChatViewController: MessageInputBarDelegate {
             } else if let text = component as? String {
                 // Firebase
                 let messageRef = Constants.refs.databaseMessages
-                let messageChatRef = messageRef.child(chatsRef.key)
+                let messageChatRef = messageRef.child(chatKey)
                 let messageFirebase = [Constants.messages.senderName: currentSender().displayName,
                                        Constants.messages.message: text,
                                        Constants.messages.timestamp: ServerValue.timestamp().description,
