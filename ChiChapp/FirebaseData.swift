@@ -8,6 +8,7 @@
 
 import Foundation
 import MessageKit
+import FirebaseStorage
 import Firebase
 
 class FirebaseData {
