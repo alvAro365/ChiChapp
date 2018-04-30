@@ -51,17 +51,11 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             photo = image
-//            let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-//            messages.append(imageMessage)
-//            messagesCollectionView.insertSections([messages.count - 1])
-//            self.messagesCollectionView.scrollToBottom()
             FirebaseData.uploadPhoto(image: photo!, completion: { (url) in
                 if url != nil {
                     print("Uploading succeeded: \(String(describing: url))")
                     self.imagePath = url
                     FirebaseData.addMessage(sender: self.currentSender(), chatKey: self.chatKey, text: url!)
-//                    self.messagesCollectionView.insertSections([self.messages.count - 1])
-                    
                 }
             })
         }
@@ -117,8 +111,6 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
 }
 
@@ -152,26 +144,6 @@ extension ChatViewController: MessagesDisplayDelegate {
 
 extension ChatViewController: MessageInputBarDelegate {
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
-//        let imageMessage = ChatMessage(image: #imageLiteral(resourceName: "koltrast"), sender: currentSender(), messageId: UUID().uuidString, date: Date())
-//        messages.append(imageMessage)
-//        messagesCollectionView.insertSections([messages.count - 1])
-//        for component in inputBar.inputTextView.components {
-//            if let image = component as? UIImage {
-//                let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-//                messages.append(imageMessage)
-//                messagesCollectionView.insertSections([messages.count - 1])
-//            } else if let text = component as? String {
-//                // Firebase
-//                let messageRef = Constants.refs.databaseMessages
-//                let messageChatRef = messageRef.child(chatKey)
-//                let messageFirebase = [Constants.messages.senderName: currentSender().displayName,
-//                                       Constants.messages.message: text,
-//                                       Constants.messages.timestamp: ServerValue.timestamp().description,
-//                                       Constants.messages.senderId: currentSender().id]
-//                messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
-//
-//            }
-//        }
         for component in inputBar.inputTextView.components {
             if let text = component as? String {
                 FirebaseData.addMessage(sender: currentSender(), chatKey: chatKey, text: text)
