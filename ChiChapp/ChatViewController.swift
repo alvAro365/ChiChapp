@@ -11,12 +11,15 @@ import MessageKit
 import Firebase
 import ISEmojiView
 
-class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
+class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
     
+    @IBOutlet weak var takePhoto: UIBarButtonItem!
+    var photo: UIImage?
     var messages: [MessageType] = []
     var currentUser: Sender!
     var contact: Sender!
     var chatKey: String!
+    var imagePath: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +34,45 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate {
         loadMessagesFromFirebase()
 
     }
+    @IBAction func takePhoto(_ sender: UIBarButtonItem) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.sourceType = .camera
+        } else {
+            imagePicker.sourceType = .savedPhotosAlbum
+        }
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+            photo = image
+//            let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+//            messages.append(imageMessage)
+//            messagesCollectionView.insertSections([messages.count - 1])
+//            self.messagesCollectionView.scrollToBottom()
+            FirebaseData.uploadPhoto(image: photo!, completion: { (url) in
+                if url != nil {
+                    print("Uploading succeeded: \(String(describing: url))")
+                    self.imagePath = url
+                    FirebaseData.addMessage(sender: self.currentSender(), chatKey: self.chatKey, text: url!)
+//                    self.messagesCollectionView.insertSections([self.messages.count - 1])
+                    
+                }
+            })
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+
     @IBAction func dismissViewController(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
     }
@@ -110,23 +152,31 @@ extension ChatViewController: MessagesDisplayDelegate {
 
 extension ChatViewController: MessageInputBarDelegate {
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
+//        let imageMessage = ChatMessage(image: #imageLiteral(resourceName: "koltrast"), sender: currentSender(), messageId: UUID().uuidString, date: Date())
+//        messages.append(imageMessage)
+//        messagesCollectionView.insertSections([messages.count - 1])
+//        for component in inputBar.inputTextView.components {
+//            if let image = component as? UIImage {
+//                let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+//                messages.append(imageMessage)
+//                messagesCollectionView.insertSections([messages.count - 1])
+//            } else if let text = component as? String {
+//                // Firebase
+//                let messageRef = Constants.refs.databaseMessages
+//                let messageChatRef = messageRef.child(chatKey)
+//                let messageFirebase = [Constants.messages.senderName: currentSender().displayName,
+//                                       Constants.messages.message: text,
+//                                       Constants.messages.timestamp: ServerValue.timestamp().description,
+//                                       Constants.messages.senderId: currentSender().id]
+//                messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
+//
+//            }
+//        }
         for component in inputBar.inputTextView.components {
-            if let image = component as? UIImage {
-                let imageMessage = ChatMessage(image: image, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-                messages.append(imageMessage)
-                messagesCollectionView.insertSections([messages.count - 1])
-            } else if let text = component as? String {
-                // Firebase
-                let messageRef = Constants.refs.databaseMessages
-                let messageChatRef = messageRef.child(chatKey)
-                let messageFirebase = [Constants.messages.senderName: currentSender().displayName,
-                                       Constants.messages.message: text,
-                                       Constants.messages.timestamp: ServerValue.timestamp().description,
-                                       Constants.messages.senderId: currentSender().id]
-                messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
-                
+            if let text = component as? String {
+                FirebaseData.addMessage(sender: currentSender(), chatKey: chatKey, text: text)
             }
+            inputBar.inputTextView.text = String()
         }
-        inputBar.inputTextView.text = String()
     }
 }

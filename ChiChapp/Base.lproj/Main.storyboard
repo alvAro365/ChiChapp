@@ -91,7 +91,15 @@
                                 <action selector="dismissViewController:" destination="BYZ-38-t0r" id="QgM-dn-a16"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="camera" id="aZO-h8-Sgz">
+                            <connections>
+                                <action selector="takePhoto:" destination="BYZ-38-t0r" id="fHa-Fy-qhd"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="takePhoto" destination="aZO-h8-Sgz" id="6vI-vQ-BWK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

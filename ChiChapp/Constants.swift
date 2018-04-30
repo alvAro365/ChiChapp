@@ -16,6 +16,7 @@ struct Constants {
         static let databaseUsers = databaseRoot.child("users")
         static let databaseChatMembers = databaseRoot.child("members")
         static let databaseMessages = databaseRoot.child("messages")
+        static let storageRef = Storage.storage().reference()
     }
     
     struct userDefaults {

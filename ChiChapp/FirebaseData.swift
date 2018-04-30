@@ -61,11 +61,28 @@ class FirebaseData {
                 let messageContent = data[Constants.messages.message],
                 !messageContent.isEmpty {
                 let sender = Sender(id: senderId, displayName: senderName)
-                let attributedText = NSAttributedString(string: messageContent, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue])
-                let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: snapshot.ref.key, date: Date())
-                messages.append(message)
+                if messageContent.hasPrefix("https://") {
+                    Storage.storage().reference(forURL: messageContent).getData(maxSize: INT64_MAX) {(data, error) in
+                        if let error = error {
+                            print("Error downloading: \(error)")
+                            return
+                        } else {
+                            let image = UIImage.init(data: data!)
+                            let imageMessage = ChatMessage(image: image!, sender: sender, messageId: snapshot.ref.key, date: Date())
+                            messages.append(imageMessage)
+                            print("Messages count: \(messages.count)")
+                            print("Image downloaded")
+                            completion(messages)
+                        }
+                    }
+                } else {
+                    let attributedText = NSAttributedString(string: messageContent, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue])
+                    let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: snapshot.ref.key, date: Date())
+                    messages.append(message)
+                            completion(messages)
+                }
             }
-            completion(messages)
+//            completion(messages)
         })
     }
     
@@ -110,6 +127,31 @@ class FirebaseData {
         chatRef.setValue(chatsMetaInfo)
         defaults.set(chatRef.key, forKey: contact.id)
         return chatRef.key
+    }
+    
+    static func uploadPhoto(image: UIImage, completion: @escaping (_ url: String?) -> Void) {
+        let photoRef = Constants.refs.storageRef.child(UUID().uuidString)
+        if let uploadData = UIImagePNGRepresentation(image) {
+            photoRef.putData(uploadData, metadata: nil, completion: { (metaData, error) in
+                if error != nil {
+                    print("Uploading failed")
+                    completion(nil)
+                } else {
+                    completion(metaData?.downloadURL()?.absoluteString)
+                }
+            })
+        }
+    }
+    
+    static func addMessage(sender: Sender, chatKey: String, text: String?) {
+        
+        let messageRef = Constants.refs.databaseMessages
+        let messageChatRef = messageRef.child(chatKey)
+        let messageFirebase = [Constants.messages.senderName: sender.displayName,
+                               Constants.messages.message: text,
+                               Constants.messages.timestamp: ServerValue.timestamp().description,
+                               Constants.messages.senderId: sender.id]
+        messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
     }
 }
 
