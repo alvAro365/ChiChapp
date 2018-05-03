@@ -93,7 +93,6 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
             for contact in contactsWithoutCurrentUser {
                 let contactPage = self.storyboard?.instantiateViewController(withIdentifier: Constants.viewControllers.contact) as! ContactViewController
                 contactPage.contact = contact
-                contactPage.backGroundColor = UIColor.yellow
                 self.pages.append(contactPage)
             }
             setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)

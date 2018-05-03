@@ -95,6 +95,21 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         }
     }
     
+    func getAvatarImage(name: String) -> UIImage {
+        switch name {
+        case "Dad":
+            return #imageLiteral(resourceName: "dad")
+        case "Mom":
+            return #imageLiteral(resourceName: "mom")
+        case "Nanny":
+            return #imageLiteral(resourceName: "nanny")
+        case "Child":
+            return #imageLiteral(resourceName: "kid")
+        default:
+            return #imageLiteral(resourceName: "kid")
+        }
+    }
+    
     // MARK: Emoji methods
     func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
         messageInputBar.inputTextView.insertText(emoji)
@@ -108,10 +123,6 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: - Navigation
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    }
 }
 
 extension ChatViewController: MessagesDataSource {
@@ -137,9 +148,14 @@ extension ChatViewController: MessagesLayoutDelegate {
 
 extension ChatViewController: MessagesDisplayDelegate {
     
-//    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-//        avatarView.set(avatar: Avatar(image: #imageLiteral(resourceName: "AlvarPng") , initials: "AA"))
-//    }
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        avatarView.set(avatar: Avatar(image: self.getAvatarImage(name: message.sender.displayName), initials: ""))
+    }
+    
+    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        let corner: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
+        return .bubbleTail(corner, .curved)
+    }
 }
 
 extension ChatViewController: MessageInputBarDelegate {
@@ -152,3 +168,4 @@ extension ChatViewController: MessageInputBarDelegate {
         }
     }
 }
+

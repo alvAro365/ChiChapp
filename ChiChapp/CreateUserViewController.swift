@@ -30,7 +30,7 @@ class CreateUserViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    @IBAction func showAlert(_ sender: UIButton) {
+    @IBAction func chooseUser(_ sender: UIButton) {
         switch sender {
         case childButton:
             performSegue(withIdentifier: Constants.segues.chooseContactVC, sender: self)
@@ -38,6 +38,7 @@ class CreateUserViewController: UIViewController {
             contact = getSender("Dad")
             saveCurrentUser(contact!)
             performSegue(withIdentifier: Constants.segues.userToChat, sender: self)
+
         case momButton:
             contact = getSender("Mom")
             saveCurrentUser(contact!)

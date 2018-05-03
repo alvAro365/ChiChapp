@@ -13,15 +13,16 @@ import MessageKit
 class ContactViewController: UIViewController {
 
     @IBOutlet weak var contactButton: UIButton!
+    @IBOutlet weak var contactImage: UIImageView!
     var backGroundColor: UIColor?
-    var contact: Sender?
+    var image: UIImage?
+    var contact: Sender!
     var contacts: [Sender]!
     var defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        contactButton.setTitle(contact?.displayName, for: .normal)
-        self.view.backgroundColor = backGroundColor
+        setContactImage()
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,10 +39,29 @@ class ContactViewController: UIViewController {
         }
     }
     
+    @IBAction func onBackArrowClick(_ sender: Any) {
+        
+        _ = navigationController?.popToRootViewController(animated: true)
+        
+    }
+    
     @IBAction func chatWiht(_ button: UIButton) {
         let chatKey = defaults.string(forKey: contact!.id)
         defaults.set(chatKey, forKey: Constants.userDefaults.chatKey)
         self.performSegue(withIdentifier: Constants.segues.toChatVC, sender: nil)
+    }
+    
+    func setContactImage() {
+        switch contact!.displayName {
+        case "Dad":
+            contactImage.image = #imageLiteral(resourceName: "dad")
+        case "Mom":
+            contactImage.image = #imageLiteral(resourceName: "mom")
+        case "Nanny":
+            contactImage.image = #imageLiteral(resourceName: "nanny")
+        default:
+            contactImage.image = #imageLiteral(resourceName: "dad")
+        }
     }
 }
 
