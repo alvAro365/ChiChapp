@@ -57,10 +57,11 @@ class FirebaseData {
         var messages =  [MessageType]()
         let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: contact.id)!).queryLimited(toLast: 5)
         _ = query.observe(.childAdded, with: { snapshot in
-            if let data = snapshot.value as? [String: String],
-                let senderId = data[Constants.messages.senderId],
-                let senderName = data[Constants.messages.senderName],
-                let messageContent = data[Constants.messages.message],
+            if let data = snapshot.value as? [String: Any],
+                let senderId = data[Constants.messages.senderId] as? String,
+                let senderName = data[Constants.messages.senderName] as? String,
+                let messageContent = data[Constants.messages.message] as? String,
+                let timestamp = data[Constants.messages.timestamp] as? TimeInterval,
                 !messageContent.isEmpty {
                 let sender = Sender(id: senderId, displayName: senderName)
                 if messageContent.hasPrefix("https://") {
@@ -69,17 +70,23 @@ class FirebaseData {
                             print("Error downloading: \(error)")
                             return
                         } else {
-                            let image = UIImage.init(data: data!)
-                            let imageMessage = ChatMessage(image: image!, sender: sender, messageId: snapshot.ref.key, date: Date())
-                            messages.append(imageMessage)
-                            print("Messages count: \(messages.count)")
-                            print("Image downloaded")
-                            completion(messages)
+                            if let image = UIImage.init(data: data!) {
+                                let date = Date(timeIntervalSince1970: timestamp/1000)
+                                print("The date is ", date)
+                                let imageMessage = ChatMessage(image: image, sender: sender, messageId: snapshot.ref.key, date: date)
+                                messages.append(imageMessage)
+                                print("Messages count: \(messages.count)")
+                                print("Image downloaded")
+//                               messages.sort(by: { $0.sentDate.compare($1.sentDate) == .orderedAscending })
+                                completion(messages)
+                            }
                         }
                     }
                 } else {
+                    let date = Date(timeIntervalSince1970: timestamp/1000)
+                    print("The date is ", date)
                     let attributedText = NSAttributedString(string: messageContent, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue])
-                    let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: snapshot.ref.key, date: Date())
+                    let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: snapshot.ref.key, date: date)
                     messages.append(message)
                             completion(messages)
                 }
@@ -152,9 +159,9 @@ class FirebaseData {
         let messageRef = Constants.refs.databaseMessages
         let messageChatRef = messageRef.child(chatKey)
         let messageFirebase = [Constants.messages.senderName: sender.displayName,
-                               Constants.messages.message: text,
-                               Constants.messages.timestamp: ServerValue.timestamp().description,
-                               Constants.messages.senderId: sender.id]
+                               Constants.messages.message: text!,
+                               Constants.messages.timestamp: ServerValue.timestamp(),
+                               Constants.messages.senderId: sender.id] as [String : Any]
         messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
     }
 }
