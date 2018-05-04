@@ -26,23 +26,24 @@ class FirebaseData {
         return contacts
     }
     
-    private static func saveCurrentUser(sender: Sender) {
+    static func saveCurrentUser(sender: Sender) {
         let defaults = UserDefaults.standard
         defaults.set(sender.displayName, forKey: Constants.userDefaults.userName)
         defaults.set(sender.id, forKey: Constants.userDefaults.userID)
     }
     
-    private static func getCurrentUser() -> Sender {
+    static func getCurrentUser() -> Sender? {
         let defaults = UserDefaults.standard
-        let name = defaults.string(forKey: Constants.userDefaults.userName)
-        let id = defaults.string(forKey: Constants.userDefaults.userID)
-        
-        return Sender(id: id!, displayName: name!)
+        if let name = defaults.string(forKey: Constants.userDefaults.userName), let id = defaults.string(forKey: Constants.userDefaults.userID) {
+            return Sender(id: id, displayName: name)
+        } else {
+            return nil
+        }
     }
 
     private static func addUserToFirebase(displayName: String) -> Sender {
         let reference = Constants.refs.databaseUsers.childByAutoId()
-        print("*****New user with ID: \(reference.key)")
+        print("New user with ID: \(reference.key)")
         let sender = Sender(id: reference.key, displayName: displayName)
         let chatKey = createChatKey(reference, sender)
         let userFirebase = ["name": displayName , "id": reference.key, "chat": chatKey] as [String : String]
@@ -93,7 +94,7 @@ class FirebaseData {
         let defaults = UserDefaults.standard
         
         usersRef.observeSingleEvent(of: .value) { (snapshot) in
-            print("Amount of users: \(snapshot.childrenCount)")
+            print("Amount of contacts: \(snapshot.childrenCount)")
             if snapshot.childrenCount > 0 {
                 for child in snapshot.children {
                     if let snap = child as? DataSnapshot,
@@ -121,9 +122,11 @@ class FirebaseData {
         print("Creating chat key")
         let defaults = UserDefaults.standard
         let chatRef = Constants.refs.databaseChats.childByAutoId()
-        let chatsMetaInfo = ["title": getCurrentUser().displayName + " & " + contact.displayName]
+        let chatsMetaInfo = ["title": (getCurrentUser()!.displayName) + " & " + contact.displayName]
         let membersRef = Constants.refs.databaseChatMembers.child(chatRef.key)
-        let members = [getCurrentUser().id: getCurrentUser().displayName, contact.id: contact.displayName]
+        let userId = getCurrentUser()!.id
+        let userDisplayName = getCurrentUser()!.displayName
+        let members = [userId: userDisplayName, contact.id: contact.displayName]
         membersRef.setValue(members)
         chatRef.setValue(chatsMetaInfo)
         defaults.set(chatRef.key, forKey: contact.id)

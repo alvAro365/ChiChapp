@@ -19,7 +19,7 @@ class CreateUserViewController: UIViewController {
     var userName: String!
     var userId: String!
     var contacts: [Sender]?
-    var contact: Sender?
+    var currentSender: Sender?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,20 +33,19 @@ class CreateUserViewController: UIViewController {
     @IBAction func chooseUser(_ sender: UIButton) {
         switch sender {
         case childButton:
-            performSegue(withIdentifier: Constants.segues.chooseContactVC, sender: self)
+            performSegue(to: Constants.segues.chooseContactVC)
         case dadButton:
-            contact = getSender("Dad")
-            saveCurrentUser(contact!)
-            performSegue(withIdentifier: Constants.segues.userToChat, sender: self)
-
+            currentSender = getSender("Dad")
+            saveCurrentUser(currentSender!)
+            performSegue(to: Constants.segues.userToChat)
         case momButton:
-            contact = getSender("Mom")
-            saveCurrentUser(contact!)
-            performSegue(withIdentifier: Constants.segues.userToChat, sender: self)
+            currentSender = getSender("Mom")
+            saveCurrentUser(currentSender!)
+            performSegue(to: Constants.segues.userToChat)
         case nannyButton:
-            contact = getSender("Nanny")
-            saveCurrentUser(contact!)
-            performSegue(withIdentifier: Constants.segues.userToChat, sender: self)
+            currentSender = getSender("Nanny")
+            saveCurrentUser(currentSender!)
+            performSegue(to: Constants.segues.userToChat)
         default:
             fatalError("Unknown button pressed")
         }
@@ -62,11 +61,31 @@ class CreateUserViewController: UIViewController {
         } else if segue.identifier == Constants.segues.userToChat {
             let chatNavigationController = segue.destination as! UINavigationController
             let chatViewController = chatNavigationController.topViewController as! ChatViewController
-            chatViewController.contact = contact
-            
+            chatViewController.contact = currentSender
+            chatViewController.avatarImage = #imageLiteral(resourceName: "kid")
+
         } else {
             print("Unknow segue triggered")
         }
+    }
+    
+    // MARK: Helper methods
+    func setUsersButtonState() {
+        
+        let currentUser = FirebaseData.getCurrentUser()
+        
+        if (currentUser != nil) && currentUser?.displayName == "Child" {
+            dadButton.isEnabled = false
+            momButton.isEnabled = false
+            nannyButton.isEnabled = false
+        } else {
+            childButton.isEnabled = false
+        }
+
+    }
+    
+    func performSegue(to viewController: String) {
+        performSegue(withIdentifier: viewController, sender: self)
     }
     
     func saveCurrentUser(_ currentUser: Sender) {
@@ -87,6 +106,7 @@ class CreateUserViewController: UIViewController {
         FirebaseData.observeUsers { contacts in
             self.contacts = contacts
             print("The contacts are: \(String(describing: self.contacts!))")
+            self.setUsersButtonState()
         }
     }
 }

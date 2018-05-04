@@ -20,6 +20,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     var contact: Sender!
     var chatKey: String!
     var imagePath: String?
+    var avatarImage: UIImage?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,9 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         messageInputBar.inputTextView.inputView = emojiView
         loadUserDefaults()
         loadMessagesFromFirebase()
+        if avatarImage == nil {
+            setAvatarImage(name: contact.displayName)
+        }
         setNavigationBarImage()
 
     }
@@ -75,7 +79,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     // MARK: Helper methods
     
     func setNavigationBarImage() {
-        let imageView = UIImageView(image: getAvatarImage(name: contact.displayName))
+        let imageView = UIImageView(image: avatarImage)
         imageView.contentMode = .scaleAspectFit
         self.navigationItem.titleView = imageView
     }
@@ -98,22 +102,21 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         if let id = defaults.string(forKey: Constants.userDefaults.userID),
             let name = defaults.string(forKey: Constants.userDefaults.userName) {
             currentUser = Sender(id: id, displayName: name)
-            title = "Chat: \(contact.displayName)"
         }
     }
     
-    func getAvatarImage(name: String) -> UIImage {
+    func setAvatarImage(name: String) {
         switch name {
         case "Dad":
-            return #imageLiteral(resourceName: "dad")
+            avatarImage = #imageLiteral(resourceName: "dad")
         case "Mom":
-            return #imageLiteral(resourceName: "mom")
+            avatarImage = #imageLiteral(resourceName: "mom")
         case "Nanny":
-            return #imageLiteral(resourceName: "nanny")
+            avatarImage = #imageLiteral(resourceName: "nanny")
         case "Child":
-            return #imageLiteral(resourceName: "kid")
+            avatarImage = #imageLiteral(resourceName: "kid")
         default:
-            return #imageLiteral(resourceName: "kid")
+            avatarImage = #imageLiteral(resourceName: "if_chat_36465")
         }
     }
     
@@ -131,6 +134,8 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     }
     
 }
+
+// MARK: Extensions
 
 extension ChatViewController: MessagesDataSource {
     
@@ -156,7 +161,7 @@ extension ChatViewController: MessagesLayoutDelegate {
 extension ChatViewController: MessagesDisplayDelegate {
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        avatarView.set(avatar: Avatar(image: self.getAvatarImage(name: message.sender.displayName), initials: ""))
+        avatarView.set(avatar: Avatar(image: avatarImage, initials: ""))
     }
     
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
