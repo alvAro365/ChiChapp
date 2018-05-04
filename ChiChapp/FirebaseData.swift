@@ -121,7 +121,7 @@ class FirebaseData {
         print("Creating chat key")
         let defaults = UserDefaults.standard
         let chatRef = Constants.refs.databaseChats.childByAutoId()
-        let chatsMetaInfo = ["title": "chat"]
+        let chatsMetaInfo = ["title": getCurrentUser().displayName + " & " + contact.displayName]
         let membersRef = Constants.refs.databaseChatMembers.child(chatRef.key)
         let members = [getCurrentUser().id: getCurrentUser().displayName, contact.id: contact.displayName]
         membersRef.setValue(members)

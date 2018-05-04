@@ -32,6 +32,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         messageInputBar.inputTextView.inputView = emojiView
         loadUserDefaults()
         loadMessagesFromFirebase()
+        setNavigationBarImage()
 
     }
     @IBAction func takePhoto(_ sender: UIBarButtonItem) {
@@ -72,6 +73,12 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     }
     
     // MARK: Helper methods
+    
+    func setNavigationBarImage() {
+        let imageView = UIImageView(image: getAvatarImage(name: contact.displayName))
+        imageView.contentMode = .scaleAspectFit
+        self.navigationItem.titleView = imageView
+    }
 
     func loadMessagesFromFirebase() {
         FirebaseData.observeMessages(contact){ messages in
