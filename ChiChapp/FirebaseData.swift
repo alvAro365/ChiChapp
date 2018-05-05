@@ -63,6 +63,7 @@ class FirebaseData {
                 let messageContent = data[Constants.messages.message] as? String,
                 let timestamp = data[Constants.messages.timestamp] as? TimeInterval,
                 !messageContent.isEmpty {
+//                print("The snapshot is: \(data)")
                 let sender = Sender(id: senderId, displayName: senderName)
                 if messageContent.hasPrefix("https://") {
                     Storage.storage().reference(forURL: messageContent).getData(maxSize: INT64_MAX) {(data, error) in
@@ -80,6 +81,7 @@ class FirebaseData {
 //                               messages.sort(by: { $0.sentDate.compare($1.sentDate) == .orderedAscending })
                                 completion(messages)
                             }
+//                                completion(messages)
                         }
                     }
                 } else {

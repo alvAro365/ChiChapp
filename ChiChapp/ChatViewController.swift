@@ -87,10 +87,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
 
     func loadMessagesFromFirebase() {
         FirebaseData.observeMessages(contact){ messages in
-//            self.messages = messages
             if messages.count > 0 {
-//                let sortedMessages = messages.sorted(by: { $0.sentDate.compare($1.sentDate) == .orderedAscending })
-//                self.messages = sortedMessages
                 self.messages = messages
                 self.messagesCollectionView.insertSections([messages.count - 1])
             }
@@ -113,24 +110,14 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         switch name {
         case "Dad":
             return #imageLiteral(resourceName: "dad")
-//            navigationBarImage = #imageLiteral(resourceName: "dad")
-//            avatar = #imageLiteral(resourceName: "dad")
         case "Mom":
             return #imageLiteral(resourceName: "mom")
-//            navigationBarImage = #imageLiteral(resourceName: "mom")
-//            avatar = #imageLiteral(resourceName: "mom")
         case "Nanny":
             return #imageLiteral(resourceName: "nanny")
-//            navigationBarImage = #imageLiteral(resourceName: "nanny")
-//            avatar = #imageLiteral(resourceName: "nanny")
         case "Child":
             return #imageLiteral(resourceName: "kid")
-//            navigationBarImage = #imageLiteral(resourceName: "kid")
-//            avatar = #imageLiteral(resourceName: "kid")
         default:
             return #imageLiteral(resourceName: "if_chat_36465")
-//            navigationBarImage = #imageLiteral(resourceName: "if_chat_36465")
-//            avatar = #imageLiteral(resourceName: "if_chat_36465")
         }
     }
     
@@ -175,7 +162,6 @@ extension ChatViewController: MessagesLayoutDelegate {
 extension ChatViewController: MessagesDisplayDelegate {
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-//        setAvatarImage(name: currentUser.displayName)
         let displayName = message.sender.displayName
         let avatar = self.getAvatarImage(name: displayName)
         avatarView.set(avatar: Avatar(image: avatar , initials: ""))

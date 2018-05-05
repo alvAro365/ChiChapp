@@ -83,15 +83,8 @@ class CreateUserViewController: UIViewController {
         let currentUser = FirebaseData.getCurrentUser()
         
         if (currentUser != nil) && currentUser?.displayName == "Child" {
-//            dadButton.isEnabled = false
-//            momButton.isEnabled = false
-//            nannyButton.isEnabled = false
-//            dadButton.isHidden = true
-//            momButton.isHidden = true
-//            nannyButton.isHidden = true
             childButton.isHidden = false
         } else {
-//            childButton.isEnabled = false
             childButton.isHidden = true
             dadButton.isHidden = false
             momButton.isHidden = false
