@@ -23,7 +23,9 @@ class CreateUserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideAllButtons()
         loadContacts()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,7 +64,7 @@ class CreateUserViewController: UIViewController {
             let chatNavigationController = segue.destination as! UINavigationController
             let chatViewController = chatNavigationController.topViewController as! ChatViewController
             chatViewController.contact = currentSender
-            chatViewController.avatarImage = #imageLiteral(resourceName: "kid")
+            chatViewController.navigationBarImage = #imageLiteral(resourceName: "kid")
 
         } else {
             print("Unknow segue triggered")
@@ -70,16 +72,30 @@ class CreateUserViewController: UIViewController {
     }
     
     // MARK: Helper methods
+    func hideAllButtons() {
+        dadButton.isHidden = true
+        momButton.isHidden = true
+        nannyButton.isHidden = true
+        childButton.isHidden = true
+    }
     func setUsersButtonState() {
         
         let currentUser = FirebaseData.getCurrentUser()
         
         if (currentUser != nil) && currentUser?.displayName == "Child" {
-            dadButton.isEnabled = false
-            momButton.isEnabled = false
-            nannyButton.isEnabled = false
+//            dadButton.isEnabled = false
+//            momButton.isEnabled = false
+//            nannyButton.isEnabled = false
+//            dadButton.isHidden = true
+//            momButton.isHidden = true
+//            nannyButton.isHidden = true
+            childButton.isHidden = false
         } else {
-            childButton.isEnabled = false
+//            childButton.isEnabled = false
+            childButton.isHidden = true
+            dadButton.isHidden = false
+            momButton.isHidden = false
+            nannyButton.isHidden = false
         }
 
     }

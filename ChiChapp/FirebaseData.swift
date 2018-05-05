@@ -164,5 +164,6 @@ class FirebaseData {
                                Constants.messages.senderId: sender.id] as [String : Any]
         messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
     }
+    
 }
 

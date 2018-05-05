@@ -20,7 +20,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     var contact: Sender!
     var chatKey: String!
     var imagePath: String?
-    var avatarImage: UIImage?
+    var navigationBarImage: UIImage?
     var avatar: UIImage?
 
     override func viewDidLoad() {
@@ -34,10 +34,9 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         messageInputBar.inputTextView.inputView = emojiView
         loadUserDefaults()
         loadMessagesFromFirebase()
-        if avatarImage == nil {
-            setAvatarImage(name: contact.displayName)
+        if navigationBarImage == nil {
+            navigationBarImage = getAvatarImage(name: contact.displayName)
         }
-        
         setNavigationBarImage()
 
     }
@@ -81,7 +80,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
     // MARK: Helper methods
     
     func setNavigationBarImage() {
-        let imageView = UIImageView(image: avatarImage)
+        let imageView = UIImageView(image: navigationBarImage)
         imageView.contentMode = .scaleAspectFit
         self.navigationItem.titleView = imageView
     }
@@ -110,23 +109,28 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         }
     }
     
-    func setAvatarImage(name: String) {
+    func getAvatarImage(name: String) -> UIImage {
         switch name {
         case "Dad":
-            avatarImage = #imageLiteral(resourceName: "dad")
-            avatar = #imageLiteral(resourceName: "dad")
+            return #imageLiteral(resourceName: "dad")
+//            navigationBarImage = #imageLiteral(resourceName: "dad")
+//            avatar = #imageLiteral(resourceName: "dad")
         case "Mom":
-            avatarImage = #imageLiteral(resourceName: "mom")
-            avatar = #imageLiteral(resourceName: "mom")
+            return #imageLiteral(resourceName: "mom")
+//            navigationBarImage = #imageLiteral(resourceName: "mom")
+//            avatar = #imageLiteral(resourceName: "mom")
         case "Nanny":
-            avatarImage = #imageLiteral(resourceName: "nanny")
-            avatar = #imageLiteral(resourceName: "nanny")
+            return #imageLiteral(resourceName: "nanny")
+//            navigationBarImage = #imageLiteral(resourceName: "nanny")
+//            avatar = #imageLiteral(resourceName: "nanny")
         case "Child":
-            avatarImage = #imageLiteral(resourceName: "kid")
-            avatar = #imageLiteral(resourceName: "kid")
+            return #imageLiteral(resourceName: "kid")
+//            navigationBarImage = #imageLiteral(resourceName: "kid")
+//            avatar = #imageLiteral(resourceName: "kid")
         default:
-            avatarImage = #imageLiteral(resourceName: "if_chat_36465")
-            avatar = #imageLiteral(resourceName: "if_chat_36465")
+            return #imageLiteral(resourceName: "if_chat_36465")
+//            navigationBarImage = #imageLiteral(resourceName: "if_chat_36465")
+//            avatar = #imageLiteral(resourceName: "if_chat_36465")
         }
     }
     
@@ -171,8 +175,10 @@ extension ChatViewController: MessagesLayoutDelegate {
 extension ChatViewController: MessagesDisplayDelegate {
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        setAvatarImage(name: currentUser.displayName)
-        avatarView.set(avatar: Avatar(image: avatar, initials: ""))
+//        setAvatarImage(name: currentUser.displayName)
+        let displayName = message.sender.displayName
+        let avatar = self.getAvatarImage(name: displayName)
+        avatarView.set(avatar: Avatar(image: avatar , initials: ""))
     }
     
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
