@@ -18,7 +18,7 @@ class FirebaseData {
         saveCurrentUser(sender: currentSender)
     }
     
-    static func createDefaultUsers() -> [Sender] {
+    static func createDefaultContacts() -> [Sender] {
         var contacts = [Sender]()
         contacts.append(addUserToFirebase(displayName: "Dad"))
         contacts.append(addUserToFirebase(displayName: "Mom"))
@@ -51,8 +51,6 @@ class FirebaseData {
         return sender
     }
     
-    typealias CompletionHandler = (Bool) -> Void
-
     static func observeMessages(_ contact: Sender, completion: @escaping ([MessageType]) -> Void) {
         var messages =  [MessageType]()
         let query = Constants.refs.databaseMessages.child(UserDefaults.standard.string(forKey: contact.id)!).queryLimited(toLast: 5)
@@ -63,7 +61,6 @@ class FirebaseData {
                 let messageContent = data[Constants.messages.message] as? String,
                 let timestamp = data[Constants.messages.timestamp] as? TimeInterval,
                 !messageContent.isEmpty {
-//                print("The snapshot is: \(data)")
                 let sender = Sender(id: senderId, displayName: senderName)
                 if messageContent.hasPrefix("https://") {
                     Storage.storage().reference(forURL: messageContent).getData(maxSize: INT64_MAX) {(data, error) in
@@ -78,10 +75,9 @@ class FirebaseData {
                                 messages.append(imageMessage)
                                 print("Messages count: \(messages.count)")
                                 print("Image downloaded")
-//                               messages.sort(by: { $0.sentDate.compare($1.sentDate) == .orderedAscending })
-                                completion(messages)
+                               messages.sort(by: { $0.sentDate.compare($1.sentDate) == .orderedAscending })
                             }
-//                                completion(messages)
+                                completion(messages)
                         }
                     }
                 } else {
@@ -90,10 +86,9 @@ class FirebaseData {
                     let attributedText = NSAttributedString(string: messageContent, attributes: [.font: UIFont.systemFont(ofSize: 50), .foregroundColor: UIColor.blue])
                     let message = ChatMessage(attributedText: attributedText, sender: sender, messageId: snapshot.ref.key, date: date)
                     messages.append(message)
-                            completion(messages)
+                    completion(messages)
                 }
             }
-//            completion(messages)
         })
     }
     
@@ -121,7 +116,7 @@ class FirebaseData {
                 }
             } else {
                 self.createDefaultUser()
-                contacts = self.createDefaultUsers()
+                contacts = self.createDefaultContacts()
             }
             completion(contacts)
         }
@@ -166,6 +161,5 @@ class FirebaseData {
                                Constants.messages.senderId: sender.id] as [String : Any]
         messageRef.child(messageChatRef.key).childByAutoId().setValue(messageFirebase)
     }
-    
 }
 

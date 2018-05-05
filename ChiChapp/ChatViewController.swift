@@ -89,7 +89,7 @@ class ChatViewController: MessagesViewController, ISEmojiViewDelegate, UIImagePi
         FirebaseData.observeMessages(contact){ messages in
             if messages.count > 0 {
                 self.messages = messages
-                self.messagesCollectionView.insertSections([messages.count - 1])
+                self.messagesCollectionView.reloadData()
             }
             self.messagesCollectionView.scrollToBottom()
         }
