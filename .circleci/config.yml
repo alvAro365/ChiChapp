@@ -1,8 +1,11 @@
-# For a detailed guide to building and testing on iOS, read the docs:
-# https://circleci.com/docs/2.0/testing-ios/
-
-version: 2.1
+ version: 2
  jobs:
+   build:
+     docker:
+       - image: circleci/ruby:2.4.1
+     steps:
+       - checkout
+       - run: echo "A first hello"
    build:
      docker:
        - image: circleci/ruby:2.4.1
