@@ -121,7 +121,6 @@
 				24618E2120852387007A9D86 /* Frameworks */,
 				24618E2220852387007A9D86 /* Resources */,
 				387A9B9604C70F990FEBC0F2 /* [CP] Embed Pods Frameworks */,
-				B2E868F6BB2B3D145823EF34 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -205,7 +204,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ChiChapp/Pods-ChiChapp-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ChiChapp/Pods-ChiChapp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/ISEmojiView/ISEmojiView.framework",
@@ -224,22 +223,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChiChapp/Pods-ChiChapp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B2E868F6BB2B3D145823EF34 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChiChapp/Pods-ChiChapp-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChiChapp/Pods-ChiChapp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
